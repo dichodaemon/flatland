@@ -49,7 +49,7 @@ file( GLOB FLATLAND_SRC flatland/*.cpp )
 file( GLOB FLATLAND_IMPL_SRC _flatland/*.cpp )
 
 add_library( flatland SHARED ${FLATLAND_SRC} ${FLATLAND_IMPL_SRC} )
-target_link_libraries( flatland iniparser chipmunk ${SDL_LIB} ${SDL_GFX_LIB} )
+target_link_libraries( flatland iniparser chipmunk )
 
 sm_cpp_install( flatland )
 
@@ -57,45 +57,49 @@ sm_cpp_install( flatland )
 # SDL Backend
 #-------------------------------------------------------------------------------
 
-file( GLOB FLATLAND_SDL_SRC flatland_sdl/*.cpp )
-
-find_library( SDL_LIB SDL )
-find_library( SDL_GFX_LIB SDL_gfx )
-
-add_library( flatland_sdl SHARED ${FLATLAND_SDL_SRC} )
-target_link_libraries(
-  flatland_sdl
-  iniparser
-  chipmunk
-  flatland
-  ${SDL_LIB}
-  ${SDL_GFX_LIB}
-)
-
-sm_cpp_install( flatland_sdl )
-
+# file( GLOB FLATLAND_SDL_SRC flatland_sdl/*.cpp )
+# 
+# find_library( SDL_LIB SDL )
+# find_library( SDL_GFX_LIB SDL_gfx )
+# 
+# add_library( flatland_sdl SHARED ${FLATLAND_SDL_SRC} )
+# target_link_libraries(
+#   flatland_sdl
+#   iniparser
+#   chipmunk
+#   flatland
+#   ${SDL_LIB}
+#   ${SDL_GFX_LIB}
+# )
+# 
+# sm_cpp_install( flatland_sdl )
+# 
 #-------------------------------------------------------------------------------
 # OpenGL Backend
 #-------------------------------------------------------------------------------
 
-file( GLOB FLATLAND_GL_SRC flatland_gl/*.cpp )
+if( NOT MACOSX )
+  
+  file( GLOB FLATLAND_GL_SRC flatland_gl/*.cpp )
 
-find_library( SDL_LIB SDL )
-find_library( SDL_GFX_LIB SDL_gfx )
-find_library( GL_LIB GL )
+  find_library( SDL_LIB SDL )
+  find_library( SDL_GFX_LIB SDL_gfx )
+  find_library( GL_LIB GL )
 
-add_library( flatland_gl SHARED ${FLATLAND_GL_SRC} )
-target_link_libraries(
-  flatland_gl
-  iniparser
-  chipmunk
-  flatland
-  ${SDL_LIB}
-  ${SDL_GFX_LIB}
-  ${GL_LIB}
-)
+  add_library( flatland_gl SHARED ${FLATLAND_GL_SRC} )
+  target_link_libraries(
+    flatland_gl
+    iniparser
+    chipmunk
+    flatland
+    ${SDL_LIB}
+    ${SDL_GFX_LIB}
+    ${GL_LIB}
+  )
 
-sm_cpp_install( flatland_gl )
+  sm_cpp_install( flatland_gl )
+
+endif( NOT MACOSX )
 
 #-------------------------------------------------------------------------------
 # Sandbox
@@ -108,5 +112,5 @@ sm_cpp_install( flatland_gl )
 # add_executable( whip sandbox/whip.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
 # target_link_libraries( whip flatland )
 
-add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
-target_link_libraries( ropeman flatland )
+# add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
+# target_link_libraries( ropeman flatland )

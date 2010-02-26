@@ -11,5 +11,7 @@ set( PACKAGE_DESCRIPTION_SUMMARY "2D Game engine" )
 set( PACKAGE_DESCRIPTION "A complete 2D Game Engine with sound, graphics and physics" )
 set( PACKAGE_DEPENDS )
 
+set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules/ )
+
 include( SimpleCMake )
 sm_configure_project()
