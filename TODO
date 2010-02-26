@@ -1,0 +1,20 @@
+Flatland
+
+* Done: Implement GraphicsContext as view.
+* Done: Named Events.
+* Done: Improve z-order handling.
+* Done: Solve problems in PaintQueue
+* Done: Engine accessors for iterations, damping, etc.
+* Done: Change portability layer to be based on dynamic loading libraries.
+
+* Add: Support for function event handlers, painters.
+* Add: Task scheduler.
+* Fix: Implement painting and physics udpate using scheduler.
+* Add: Reimplement graphics layer using opengl.
+* Fix: Move engine add methods to Space.
+* Fix: Add exceptions in all search operations.
+* Fix: Change all interfaces to use Vector2D where required.
+
+Arde
+
+* Add: Collision checking for GameObjects.
