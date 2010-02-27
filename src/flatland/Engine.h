@@ -140,7 +140,7 @@ public:
   void gravity( const Vector2D & g );
 
 
-  void setTransform( const Vector2D & center, double width );
+  void setTransform( const Vector2D & center, double rotation, double width );
   double width();
   double height();
   Vector2D toGraphics( const Vector2D & vector );

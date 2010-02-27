@@ -259,9 +259,9 @@ Flatland::Engine::gravity( const Vector2D & g )
 //------------------------------------------------------------------------------
 
 void
-Flatland::Engine::setTransform( const Vector2D & center, double width )
+Flatland::Engine::setTransform( const Vector2D & center, double rotation, double width )
 {
-  _graphics.setTransform( center, width );
+  _graphics.setTransform( center, rotation, width );
 }
 
 //------------------------------------------------------------------------------

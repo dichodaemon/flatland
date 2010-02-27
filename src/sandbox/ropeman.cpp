@@ -78,7 +78,7 @@ public:
   {
     double x = _object.position().x();
     double y = std::min( _lowerLimit, _object.position().y() );
-    graphics.setTransform( Vector2D( x, y ), _width );
+    graphics.setTransform( Vector2D( x, y ), 0, _width );
   }
 
   void clear( GraphicsContext & graphics )

@@ -48,8 +48,10 @@ sm_cpp_install_binaries( chipmunk )
 file( GLOB FLATLAND_SRC flatland/*.cpp )
 file( GLOB FLATLAND_IMPL_SRC _flatland/*.cpp )
 
+find_library( DL_LIB dl )
+
 add_library( flatland SHARED ${FLATLAND_SRC} ${FLATLAND_IMPL_SRC} )
-target_link_libraries( flatland iniparser chipmunk )
+target_link_libraries( flatland iniparser chipmunk ${DL_LIB} )
 
 sm_cpp_install( flatland )
 
@@ -112,5 +114,5 @@ endif( NOT MACOSX )
 # add_executable( whip sandbox/whip.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
 # target_link_libraries( whip flatland )
 
-# add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
-# target_link_libraries( ropeman flatland )
+add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
+target_link_libraries( ropeman flatland )
