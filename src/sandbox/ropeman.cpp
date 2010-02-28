@@ -48,7 +48,9 @@ public:
   }
 
   void onMouseDown( const MouseDownEvent & event ) {
-    Vector2D point = _engine.toWorld( Vector2D( event.x(), event.y() ) );
+    Vector2D point = _engine.toWorld(
+      Vector2D( event.x() - _engine.width() / 2, -event.y() + _engine.height() / 2 )
+    );
     switch ( event.button() ) {
       case MouseEvent::BUTTON_LEFT:
         _engine.send( "ROPE_TOGGLE", TypedEvent<Vector2D>( point ) );
@@ -77,8 +79,9 @@ public:
   void center( GraphicsContext & graphics )
   {
     double x = _object.position().x();
-    double y = std::min( _lowerLimit, _object.position().y() );
+    double y = std::max( _lowerLimit, _object.position().y() );
     graphics.setTransform( Vector2D( x, y ), 0, _width );
+    Vector2D world = graphics.toGraphics( _object.position() );
   }
 
   void clear( GraphicsContext & graphics )
@@ -157,10 +160,10 @@ public:
     _body->position( Vector2D( 0, 0 ) );
 
     PolygonShape::VertexList square( 4 );
-    square[0] = Vector2D( x, -height );
-    square[1] = Vector2D( x,  0 );
+    square[0] = Vector2D( x, height );
+    square[1] = Vector2D( x + width, height );
     square[2] = Vector2D( x + width,  0 );
-    square[3] = Vector2D( x + width, -height );
+    square[3] = Vector2D( x,  0 );
 
     PolygonShape * s = new PolygonShape( *_body, square, Vector2D( 0, 0 ), true );
     s->collisionGroup( 1 );
@@ -204,10 +207,10 @@ class Level
 public:
   Level( Engine & engine )
     : _engine( engine ),
-      _floor( 0, 0, 3000, 0, 0.1 ),
-      _ropeMan( 0, -100, 80, 0.4, 1.75 ),
+      _floor( -20, 0, 3000, 0, 0.1 ),
+      _ropeMan( 0, 100, 80, 0.4, 1.75 ),
       _rope( NULL ),
-      _painters( _ropeMan, 100, -32 )
+      _painters( _ropeMan, 100, 32 )
   {
     initialize();
   }
@@ -348,7 +351,7 @@ int main( int argc, char * argv[] )
   );
 
   Engine engine( configuration );
-  engine.gravity( Vector2D( 0, 9.81 ) );
+  engine.gravity( Vector2D( 0, -9.81 ) );
   engine.elasticIterations( 5 );
   engine.iterations( 10 );
 

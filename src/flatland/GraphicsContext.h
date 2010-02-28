@@ -3,6 +3,7 @@
 
 
 #include "GraphicsContextBase.h"
+#include "Transform.h"
 #include "Vector2D.h"
 #include <cstdlib>
 
@@ -89,9 +90,7 @@ public:
 private:
   friend class Screen;
   GraphicsContextBase * _impl;
-  Vector2D              _p1;
-  double                _dX;
-  double                _dY;
+  Transform             _transform;
 };
 
 

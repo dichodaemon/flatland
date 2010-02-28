@@ -25,9 +25,9 @@ public:
   double y() const;
   void y( double value );
 
-  Vector2D operator+( const Vector2D & other );
-  Vector2D operator-( const Vector2D & other );
-  Vector2D operator-();
+  Vector2D operator+( const Vector2D & other ) const;
+  Vector2D operator-( const Vector2D & other ) const;
+  Vector2D operator-() const;
   Vector2D operator*( double other );
   double dot( const Vector2D & other );
   double cross( const Vector2D & other );

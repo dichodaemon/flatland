@@ -128,7 +128,7 @@ GraphicsContext::clear( const Flatland::Color & color )
   glClear( GL_COLOR_BUFFER_BIT );
   glMatrixMode( GL_PROJECTION );
   glLoadIdentity();
-  glOrtho( 0.0f, width(), height(), 0.0f, -1.0f, 1.0f );
+  glOrtho( -width() / 2.0, width() / 2.0, -height() / 2.0, height() / 2.0, -1.0f, 1.0f );
   glMatrixMode( GL_MODELVIEW );
   glColor3f(0.0f, 1.0f, 0.0f);
 }

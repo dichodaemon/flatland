@@ -8,20 +8,14 @@ using namespace Flatland;
 //------------------------------------------------------------------------------
 
 Flatland::GraphicsContext::GraphicsContext( size_t width, size_t height )
-  : _impl( ClassLoader<GraphicsContextBase>::loadFactory( "newGraphicsContext" )( width, height )  ),
-    _p1( -width / 2.0, -height / 2.0 ),
-    _dX( 1 ),
-    _dY( 1 )
+  : _impl( ClassLoader<GraphicsContextBase>::loadFactory( "newGraphicsContext" )( width, height )  )
 {
 }
 
 //------------------------------------------------------------------------------
 
 Flatland::GraphicsContext::GraphicsContext( Screen & screen )
-  : _impl( ClassLoader<GraphicsContextBase>::loadFactory<ScreenFactory>( "newGraphicsContextFromScreen" )( *( screen._impl ) ) ),
-    _p1( -screen.width() / 2.0, -screen.height() / 2.0 ),
-    _dX( 1 ),
-    _dY( 1 )
+  : _impl( ClassLoader<GraphicsContextBase>::loadFactory<ScreenFactory>( "newGraphicsContextFromScreen" )( *( screen._impl ) ) )
 {
 }
 
@@ -30,11 +24,10 @@ Flatland::GraphicsContext::GraphicsContext( Screen & screen )
 void
 Flatland::GraphicsContext::setTransform( const Vector2D & center, double rotation, double width  )
 {
-  double height = width * this->height() / this->width();
-  _p1.x( center.x() - width / 2.0 );
-  _p1.y( center.y() - height / 2.0 );
-  _dX = this->width()  / width;
-  _dY = this->height() / height;
+  _transform.translation( center );
+  _transform.rotation( rotation );
+  double scale = width / this->width();
+  _transform.scale( Vector2D( scale, scale ) );
 }
 
 //------------------------------------------------------------------------------
@@ -58,7 +51,7 @@ Flatland::GraphicsContext::height()
 Vector2D
 Flatland::GraphicsContext::toGraphics( const Vector2D & vector )
 {
-  return  Vector2D( ( vector.x() - _p1.x() ) * _dX, ( vector.y() - _p1.y() ) * _dY );
+  return  _transform.fromParent( vector );
 }
 
 //------------------------------------------------------------------------------
@@ -66,9 +59,7 @@ Flatland::GraphicsContext::toGraphics( const Vector2D & vector )
 Vector2D
 Flatland::GraphicsContext::toWorld( const Vector2D & vector )
 {
-  double dX = 1.0 / _dX;
-  double dY = 1.0 / _dY;
-  return  Vector2D( vector.x() * dX + _p1.x(), vector.y() * dY + _p1.y() );
+  return  _transform.toParent( vector );
 }
 
 //------------------------------------------------------------------------------
@@ -90,7 +81,11 @@ Flatland::GraphicsContext::drawCircle(
 )
 {
   Vector2D v = toGraphics( Vector2D( x, y ) );
-  _impl->drawCircle( v.x(), v.y(), radius * _dX, color, thickness );
+  _impl->drawCircle(
+    v.x(), v.y(),
+    radius * _transform.scale().x(),
+    color, thickness
+  );
 }
 
 //------------------------------------------------------------------------------
@@ -112,7 +107,10 @@ Flatland::GraphicsContext::drawCircle(
   else
   {
     Vector2D v = toGraphics( Vector2D( x, y ) );
-    _impl->drawCircle( v.x(), v.y(), radius * _dX, color, thickness );
+    _impl->drawCircle(
+      v.x(), v.y(),
+      radius * _transform.scale().x(),
+      color, thickness );
   }
 }
 
@@ -134,7 +132,11 @@ Flatland::GraphicsContext::fillCircle(
   else
   {
     Vector2D v = toGraphics( Vector2D( x, y ) );
-    _impl->fillCircle( v.x(), v.y(), radius * _dX, color );
+    _impl->fillCircle(
+      v.x(), v.y(),
+      radius * _transform.scale().x(),
+      color
+    );
   }
 }
 
@@ -149,7 +151,11 @@ Flatland::GraphicsContext::fillCircle(
 )
 {
   Vector2D v = toGraphics( Vector2D( x, y ) );
-  _impl->fillCircle( v.x(), v.y(), radius * _dX, color );
+  _impl->fillCircle(
+    v.x(), v.y(),
+    radius * _transform.scale().x(),
+    color
+  );
 }
 
 //------------------------------------------------------------------------------

@@ -60,7 +60,7 @@ Flatland::Vector2D::operator const cpVect &() const
 
 inline
 Flatland::Vector2D
-Flatland::Vector2D::operator+( const Vector2D & other )
+Flatland::Vector2D::operator+( const Vector2D & other ) const
 {
   return cpvadd( _vector, other );
 }
@@ -69,7 +69,7 @@ Flatland::Vector2D::operator+( const Vector2D & other )
 
 inline
 Flatland::Vector2D
-Flatland::Vector2D::operator-( const Vector2D & other )
+Flatland::Vector2D::operator-( const Vector2D & other ) const
 {
   return cpvsub( _vector, other );
 }
@@ -78,7 +78,7 @@ Flatland::Vector2D::operator-( const Vector2D & other )
 
 inline
 Flatland::Vector2D
-Flatland::Vector2D::operator-()
+Flatland::Vector2D::operator-() const 
 {
   return cpvneg( _vector );
 }
