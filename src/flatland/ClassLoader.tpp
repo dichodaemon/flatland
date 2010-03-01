@@ -41,10 +41,10 @@ FACTORY
 Flatland::ClassLoader< T >::loadFactory( const std::string & factoryName )
 {
   size_t flags = RTLD_NOW | RTLD_GLOBAL	;
-  void * handle = dlopen( findFile( "lib" + _libraryName + ".dylib", _searchPath ).c_str(), flags );
+  void * handle = dlopen( findFile( "lib" + _libraryName + LIBRARY_EXT, _searchPath ).c_str(), flags );
   if( handle == 0 ) {
     Logger::error( std::string( "Error: %s\n" ) + dlerror(), "ClassLoader" );
-    handle = dlopen( findFile( _libraryName + ".dylib", _searchPath ).c_str(), flags );
+    handle = dlopen( findFile( _libraryName + LIBRARY_EXT, _searchPath ).c_str(), flags );
     if ( handle == 0 ) {
       throw ClassLoadingError( "Unable to open class lib: " + _libraryName + " (" + factoryName + ")\nError:" + dlerror() );
     }

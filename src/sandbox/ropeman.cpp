@@ -35,15 +35,38 @@ class EventHandler
 {
 public:
   EventHandler( Engine & engine )
-    : _engine( engine )
+    : _engine( engine ),
+      _rotation( 0 ),
+      _width( 100 )
   {
     engine.subscribe( *this, &EventHandler::onKeyPressed );
     engine.subscribe( *this, &EventHandler::onMouseDown );
   }
 
   void onKeyPressed( const KeyPressedEvent & event ) {
-    if ( event.key() == KeyboardEvent::KEY_ESCAPE ) {
-      _engine.stop();
+    switch ( event.key() )
+    {
+      case KeyboardEvent::KEY_ESCAPE:
+        _engine.stop();
+        break;
+      case KeyboardEvent::KEY_a:
+        _rotation += M_PI / 20;
+        _engine.send( "ROTATE", TypedEvent<double>( _rotation ) );
+        break;
+      case KeyboardEvent::KEY_d:
+        _rotation -= M_PI / 20;
+        _engine.send( "ROTATE", TypedEvent<double>( _rotation ) );
+        break;
+      case KeyboardEvent::KEY_w:
+        _width *= 1.1;
+        _engine.send( "ZOOM", TypedEvent<double>( _width ) );
+        break;
+      case KeyboardEvent::KEY_s:
+        _width /= 1.1;
+        _engine.send( "ZOOM", TypedEvent<double>( _width ) );
+        break;
+      default:
+        break;
     }
   }
 
@@ -62,6 +85,8 @@ public:
 
 private:
   Engine & _engine;
+  double   _rotation;
+  double   _width;
 };
 
 //------------------------------------------------------------------------------
@@ -72,16 +97,26 @@ public:
   Painters( GameObject & object, double width, double lowerLimit )
     : _object( object ),
       _width( width ),
-      _lowerLimit( lowerLimit )
+      _lowerLimit( lowerLimit ),
+      _rotation( 0 )
   {
+  }
+
+  void onRotate( const TypedEvent<double> & event )
+  {
+    _rotation = event();
+  }
+  
+  void onZoom( const TypedEvent<double> & event )
+  {
+    _width = event();
   }
 
   void center( GraphicsContext & graphics )
   {
     double x = _object.position().x();
     double y = std::max( _lowerLimit, _object.position().y() );
-    graphics.setTransform( Vector2D( x, y ), 0, _width );
-    Vector2D world = graphics.toGraphics( _object.position() );
+    graphics.setTransform( Vector2D( x, y ), _rotation, _width );
   }
 
   void clear( GraphicsContext & graphics )
@@ -93,6 +128,7 @@ private:
   GameObject & _object;
   double       _width;
   double       _lowerLimit;
+  double       _rotation;
 };
 
 //------------------------------------------------------------------------------
@@ -232,6 +268,8 @@ public:
   void initialize()
   {
     _engine.subscribe( "ROPE_TOGGLE", *this, &Level::onToggleRope );
+    _engine.subscribe( "ROTATE", _painters, &Painters::onRotate );
+    _engine.subscribe( "ZOOM", _painters, &Painters::onZoom );
     _engine.addPainter( _painters, &Painters::clear, -1E6 );
     _engine.addPainter( _painters, &Painters::center, -1E6 );
     add( _floor );

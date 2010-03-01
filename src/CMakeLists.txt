@@ -80,15 +80,16 @@ sm_cpp_install( flatland )
 # OpenGL Backend
 #-------------------------------------------------------------------------------
 
-include( FindSDL )
+include( FindOpenAL )
 include( FindOpenGL )
+include( FindSDL )
 
-if( SDL_FOUND )
-  message( "SDL Found" )
-  include_directories( SDL_INCLUDE_DIR )
-else( SDL_FOUND )
-  message( "SDL not found" )
-endif( SDL_FOUND )  
+if( OPENGL_FOUND )
+  message( "OpenAL Found" )
+  include_directories( OPENGL_INCLUDE_DIR )
+else( OPENGL_FOUND )
+  message( "OpenAL not found" )
+endif( OPENGL_FOUND )
 
 if( OPENGL_FOUND )
   message( "OpenGL Found" )
@@ -96,6 +97,14 @@ if( OPENGL_FOUND )
 else( OPENGL_FOUND )
   message( "OpenGL not found" )
 endif( OPENGL_FOUND )  
+
+if( SDL_FOUND )
+  include_directories( SDL_INCLUDE_DIR )
+else( SDL_FOUND )
+  message( "SDL not found" )
+endif( SDL_FOUND )
+
+find_library( ALUT_LIB alut )
 
 file( GLOB FLATLAND_GL_SRC flatland_gl/*.cpp )
 
@@ -124,3 +133,6 @@ sm_cpp_install( flatland_gl )
 
 add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
 target_link_libraries( ropeman flatland )
+
+add_executable( testsound sandbox/testsound.cpp )
+target_link_libraries( testsound ${OPENAL_LIBRARY} ${ALUT_LIB} )

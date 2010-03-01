@@ -5,6 +5,7 @@
 #include "Exceptions.h"
 #include "FileUtils.h"
 #include "Logger.h"
+#include "Platform.h"
 #include <string>
 #include <dlfcn.h>
 
