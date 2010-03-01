@@ -80,28 +80,36 @@ sm_cpp_install( flatland )
 # OpenGL Backend
 #-------------------------------------------------------------------------------
 
-if( NOT MACOSX )
-  
-  file( GLOB FLATLAND_GL_SRC flatland_gl/*.cpp )
+include( FindSDL )
+include( FindOpenGL )
 
-  find_library( SDL_LIB SDL )
-  find_library( SDL_GFX_LIB SDL_gfx )
-  find_library( GL_LIB GL )
+if( SDL_FOUND )
+  message( "SDL Found" )
+  include_directories( SDL_INCLUDE_DIR )
+else( SDL_FOUND )
+  message( "SDL not found" )
+endif( SDL_FOUND )  
 
-  add_library( flatland_gl SHARED ${FLATLAND_GL_SRC} )
-  target_link_libraries(
-    flatland_gl
-    iniparser
-    chipmunk
-    flatland
-    ${SDL_LIB}
-    ${SDL_GFX_LIB}
-    ${GL_LIB}
-  )
+if( OPENGL_FOUND )
+  message( "OpenGL Found" )
+  include_directories( OPENGL_INCLUDE_DIR )
+else( OPENGL_FOUND )
+  message( "OpenGL not found" )
+endif( OPENGL_FOUND )  
 
-  sm_cpp_install( flatland_gl )
+file( GLOB FLATLAND_GL_SRC flatland_gl/*.cpp )
 
-endif( NOT MACOSX )
+add_library( flatland_gl SHARED ${FLATLAND_GL_SRC} )
+target_link_libraries(
+  flatland_gl
+  iniparser
+  chipmunk
+  flatland
+  ${SDL_LIBRARY}
+  ${OPENGL_gl_LIBRARY}
+)
+
+sm_cpp_install( flatland_gl )
 
 #-------------------------------------------------------------------------------
 # Sandbox

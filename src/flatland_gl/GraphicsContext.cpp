@@ -1,9 +1,6 @@
 #include "GraphicsContext.h"
 #include "Screen.h"
 #include <flatland/Color.h>
-extern "C" {
-  #include <SDL/SDL_gfxPrimitives.h>
-}
 
 //------------------------------------------------------------------------------
 
