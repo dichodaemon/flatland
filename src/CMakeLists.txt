@@ -56,40 +56,38 @@ target_link_libraries( flatland iniparser chipmunk ${DL_LIB} )
 sm_cpp_install( flatland )
 
 #-------------------------------------------------------------------------------
-# SDL Backend
+# MacOS Backend
 #-------------------------------------------------------------------------------
 
-# file( GLOB FLATLAND_SDL_SRC flatland_sdl/*.cpp )
-# 
-# find_library( SDL_LIB SDL )
-# find_library( SDL_GFX_LIB SDL_gfx )
-# 
-# add_library( flatland_sdl SHARED ${FLATLAND_SDL_SRC} )
-# target_link_libraries(
-#   flatland_sdl
-#   iniparser
-#   chipmunk
-#   flatland
-#   ${SDL_LIB}
-#   ${SDL_GFX_LIB}
-# )
-# 
-# sm_cpp_install( flatland_sdl )
-# 
+find_library( COCOA_LIB Cocoa )
+
+file( GLOB FLATLAND_MACOS_SRC flatland_macos/*.mm )
+
+add_library( flatland_macos SHARED ${FLATLAND_MACOS_SRC} )
+target_link_libraries(
+  flatland_macos
+  iniparser
+  chipmunk
+  flatland
+  ${COCOA_LIB}
+)
+
+sm_cpp_install( flatland_macos )
+
 #-------------------------------------------------------------------------------
 # OpenGL Backend
 #-------------------------------------------------------------------------------
 
-include( FindOpenAL )
+# include( FindOpenAL )
 include( FindOpenGL )
 include( FindSDL )
 
-if( OPENGL_FOUND )
-  message( "OpenAL Found" )
-  include_directories( OPENGL_INCLUDE_DIR )
-else( OPENGL_FOUND )
-  message( "OpenAL not found" )
-endif( OPENGL_FOUND )
+# if( OPENAL_FOUND )
+#   message( "OpenAL Found" )
+#   include_directories( OPENAL_INCLUDE_DIR )
+# else( OPENAL_FOUND )
+#   message( "OpenAL not found" )
+# endif( OPENAL_FOUND )
 
 if( OPENGL_FOUND )
   message( "OpenGL Found" )
@@ -104,7 +102,7 @@ else( SDL_FOUND )
   message( "SDL not found" )
 endif( SDL_FOUND )
 
-find_library( ALUT_LIB alut )
+# find_library( ALUT_LIB alut )
 
 file( GLOB FLATLAND_GL_SRC flatland_gl/*.cpp )
 
@@ -131,8 +129,14 @@ sm_cpp_install( flatland_gl )
 # add_executable( whip sandbox/whip.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
 # target_link_libraries( whip flatland )
 
-add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
-target_link_libraries( ropeman flatland )
+if ( MACOSX )
+  find_library( FOUNDATION_LIB Foundation )
+  add_executable( ropeman sandbox/ropeman.mm sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
+  target_link_libraries( ropeman flatland ${FOUNDATION_LIB} )
+else ( MACOSX )
+  add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
+  target_link_libraries( ropeman flatland )
+endif ( MACOSX )
 
-add_executable( testsound sandbox/testsound.cpp )
-target_link_libraries( testsound ${OPENAL_LIBRARY} ${ALUT_LIB} )
+# add_executable( testsound sandbox/testsound.cpp )
+# target_link_libraries( testsound ${OPENAL_LIBRARY} ${ALUT_LIB} )

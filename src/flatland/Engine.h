@@ -153,6 +153,8 @@ protected:
 
 private:
   const Configuration & _configuration;
+  Bus                   _bus;
+  EventDispatcher       _dispatcher;
   Screen                _screen;
   GraphicsContext       _graphics;
   PaintQueue            _paintQueue;
@@ -162,8 +164,6 @@ private:
   Clock                 _fpsClock;
   bool                  _paused;
   double                _startTime;
-  Bus                   _bus;
-  EventDispatcher       _dispatcher;
   bool                  _running;
 
 };

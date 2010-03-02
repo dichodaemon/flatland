@@ -2,7 +2,7 @@
 #define EVENT_DISPATCHER_H
 
 
-#include "SDLObject.h"
+#include "CocoaObject.h"
 #include <flatland/EventDispatcherBase.h>
 
 
@@ -18,7 +18,7 @@ public:
   EventDispatcher( Flatland::Bus & bus );
   bool dispatch();
 private:
-  SDLObject       _sdl;
+  CocoaObject     _cocoa;
   Flatland::Bus & _bus;
 };
 

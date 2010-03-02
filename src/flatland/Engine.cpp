@@ -12,6 +12,8 @@ using namespace std;
 
 Flatland::Engine::Engine( const Configuration & configuration )
   : _configuration( configuration ),
+    _bus(),
+    _dispatcher( _bus ),
     _screen( configuration.getInt( "graphics", "width" ),
              configuration.getInt( "graphics", "height" ) ),
     _graphics( _screen ),
@@ -19,8 +21,6 @@ Flatland::Engine::Engine( const Configuration & configuration )
     _physicsRemainingTime( _physicsPeriod ),
     _fpsClock( configuration.getDouble( "graphics", "fps" ) ),
     _startTime( 0 ),
-    _bus(),
-    _dispatcher( _bus ),
     _running( true )
 {
 }
