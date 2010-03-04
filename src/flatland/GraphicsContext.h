@@ -13,8 +13,8 @@ namespace Flatland
 
 
 class Color;
-class ScreenBase;
-class Screen;
+class WindowBase;
+class Window;
 
 
 class GraphicsContext : public GraphicsContextBase
@@ -23,7 +23,7 @@ public:
 
   GraphicsContext( size_t width, size_t height );
   
-  GraphicsContext( Screen & screen );
+  GraphicsContext( Window & screen );
   
   virtual ~GraphicsContext();
 
@@ -88,7 +88,7 @@ public:
   void clear( const Color & color );
 
 private:
-  friend class Screen;
+  friend class Window;
   GraphicsContextBase * _impl;
   Transform             _transform;
 };

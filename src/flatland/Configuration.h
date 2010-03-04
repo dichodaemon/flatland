@@ -10,8 +10,6 @@ namespace Flatland
 {
 
 
-class ConfigurationImpl;
-
 class Configuration
 {
 public:
@@ -55,7 +53,8 @@ public:
   throw ( WrongKeyException );
 
 private:
-  ConfigurationImpl * _impl;
+  struct ConfigurationImpl;
+  ConfigurationImpl * _data;
 };
 
 

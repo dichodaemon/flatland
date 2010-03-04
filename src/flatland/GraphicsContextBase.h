@@ -10,14 +10,14 @@ namespace Flatland
 
 
 class Color;
-class ScreenBase;
+class WindowBase;
 
 
 class GraphicsContextBase
 {
 public:
   typedef GraphicsContextBase * (*Factory)( size_t width, size_t height );
-  typedef GraphicsContextBase * (*ScreenFactory)( ScreenBase & );
+  typedef GraphicsContextBase * (*WindowFactory)( WindowBase & );
   virtual ~GraphicsContextBase();
 
   virtual double width() = 0;
@@ -50,7 +50,7 @@ public:
   virtual void clear( const Color & color ) = 0;
 
 private:
-  friend class ScreenBase;
+  friend class WindowBase;
 };
 
 

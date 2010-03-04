@@ -1,7 +1,7 @@
-#include "EventDispatcherBase.h"
+#include "WindowBase.h"
 
 //------------------------------------------------------------------------------
 
-Flatland::EventDispatcherBase::~EventDispatcherBase()
+Flatland::WindowBase::~WindowBase()
 {
 }

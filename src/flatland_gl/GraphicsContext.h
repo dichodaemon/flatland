@@ -2,7 +2,6 @@
 #define GRAPHICS_CONTEXT_H
 
 
-#include "SDLObject.h"
 // #include <FTGL/ftgl.h>
 #include <flatland/GraphicsContextBase.h>
 
@@ -10,17 +9,15 @@
 namespace Flatland
 {
   class Color;
+  class Window;
 }
-
-
-class Screen;
 
 
 class GraphicsContext : public Flatland::GraphicsContextBase
 {
 public:
   GraphicsContext( size_t width, size_t height );
-  GraphicsContext( Screen & screen );
+  GraphicsContext( Flatland::Window & screen );
   virtual ~GraphicsContext();
 
   double width();
@@ -53,19 +50,16 @@ public:
   void clear( const Flatland::Color & color );
 
 private:
-  friend class Screen;
-
-  SDLObject     _sdl;
-  SDL_Surface * _surface;
   bool          _owner;
-//   FTFont *      _font;
+  double        _width;
+  double        _height;
 
 };
 
 extern "C"
 {
   Flatland::GraphicsContextBase * newGraphicsContext( size_t width, size_t height );
-  Flatland::GraphicsContextBase * newGraphicsContextFromScreen( Screen & screen );
+  Flatland::GraphicsContextBase * newGraphicsContextFromWindow( Flatland::Window & screen );
 }
 
 #endif //GRAPHICS_CONTEXT_H

@@ -363,29 +363,26 @@ private:
 
 int main( int argc, char * argv[] )
 {
+  // Logger::setLevel( Logger::DEBUG, "Engine" );
+  // Logger::setLevel( Logger::DEBUG, "OpenGL" );
+
   if ( argc != 2 ) {
     Logger::error( "No configuration file was specified" , "main" );
     exit( 1 );
   }
   Configuration configuration( argv[1] );
 
-  ClassLoader<ScreenBase>::searchPath(
-    configuration.getString( "graphics", "libraryPath" )
+  ClassLoader<WindowBase>::searchPath(
+    configuration.getString( "eventSystem", "libraryPath" )
   );
-  ClassLoader<ScreenBase>::libraryName(
-    configuration.getString( "graphics", "backend" )
+  ClassLoader<WindowBase>::libraryName(
+    configuration.getString( "eventSystem", "backend" )
   );
   ClassLoader<GraphicsContextBase>::searchPath(
     configuration.getString( "graphics", "libraryPath" )
   );
   ClassLoader<GraphicsContextBase>::libraryName(
     configuration.getString( "graphics", "backend" )
-  );
-  ClassLoader<EventDispatcherBase>::searchPath(
-    configuration.getString( "eventSystem", "libraryPath" )
-  );
-  ClassLoader<EventDispatcherBase>::libraryName(
-    configuration.getString( "eventSystem", "backend" )
   );
 
   Engine engine( configuration );

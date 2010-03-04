@@ -11,6 +11,7 @@ class Clock
 public:
   Clock( double frequency );
   double tick();
+  double elapsed();
   void pause( bool value );
   bool pause();
   double seconds();

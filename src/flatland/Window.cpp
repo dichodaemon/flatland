@@ -1,18 +1,18 @@
-#include "Screen.h"
+#include "Window.h"
 #include "ClassLoader.h"
 #include "GraphicsContextBase.h"
 #include "GraphicsContext.h"
 
 //------------------------------------------------------------------------------
 
-Flatland::Screen::Screen( size_t width, size_t height )
-  : _impl( ClassLoader<ScreenBase>::loadFactory( "newScreen" )( width, height ) )
+Flatland::Window::Window( Bus & bus, size_t width, size_t height )
+  : _impl( FACTORY( WindowBase, newWindow )( bus, width, height ) )
 {
 }
 
 //------------------------------------------------------------------------------
 
-Flatland::Screen::~Screen()
+Flatland::Window::~Window()
 {
   delete _impl;
 }
@@ -20,7 +20,7 @@ Flatland::Screen::~Screen()
 //------------------------------------------------------------------------------
 
 double
-Flatland::Screen::width()
+Flatland::Window::width()
 {
   return _impl->width();
 }
@@ -28,14 +28,14 @@ Flatland::Screen::width()
 //------------------------------------------------------------------------------
 
 double
-Flatland::Screen::height()
+Flatland::Window::height()
 {
   return _impl->height();
 }
 //------------------------------------------------------------------------------
 
 void
-Flatland::Screen::flip()
+Flatland::Window::flip()
 {
   _impl->flip();
 }
@@ -43,10 +43,19 @@ Flatland::Screen::flip()
 //------------------------------------------------------------------------------
 
 void
-Flatland::Screen::display( GraphicsContextBase & graphics )
+Flatland::Window::display( GraphicsContextBase & graphics )
 {
   if ( GraphicsContext * g = dynamic_cast< GraphicsContext * >( &graphics ) )
   {
     _impl->display( *( g->_impl ) );
   }
 }
+
+//------------------------------------------------------------------------------
+
+void
+Flatland::Window::run( double frequency )
+{
+  _impl->run( frequency );
+}
+

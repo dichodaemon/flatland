@@ -1,3 +1,7 @@
+ADD_DEFINITIONS( -DPLUGIN_LIBRARIES )
+ADD_DEFINITIONS( -DPTHREADS )
+
+
 #-------------------------------------------------------------------------------
 # Iniparser
 #-------------------------------------------------------------------------------
@@ -46,11 +50,10 @@ sm_cpp_install_binaries( chipmunk )
 #-------------------------------------------------------------------------------
 
 file( GLOB FLATLAND_SRC flatland/*.cpp )
-file( GLOB FLATLAND_IMPL_SRC _flatland/*.cpp )
 
 find_library( DL_LIB dl )
 
-add_library( flatland SHARED ${FLATLAND_SRC} ${FLATLAND_IMPL_SRC} )
+add_library( flatland SHARED ${FLATLAND_SRC} )
 target_link_libraries( flatland iniparser chipmunk ${DL_LIB} )
 
 sm_cpp_install( flatland )
@@ -91,7 +94,7 @@ include( FindSDL )
 
 if( OPENGL_FOUND )
   message( "OpenGL Found" )
-  include_directories( OPENGL_INCLUDE_DIR )
+  include_directories( ${OPENGL_INCLUDE_DIR} )
 else( OPENGL_FOUND )
   message( "OpenGL not found" )
 endif( OPENGL_FOUND )  
@@ -131,8 +134,25 @@ sm_cpp_install( flatland_gl )
 
 if ( MACOSX )
   find_library( FOUNDATION_LIB Foundation )
-  add_executable( ropeman sandbox/ropeman.mm sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
-  target_link_libraries( ropeman flatland ${FOUNDATION_LIB} )
+  
+  add_executable( 
+    ropeman MACOSX_BUNDLE 
+    sandbox/ropeman.cpp 
+    sandbox/GameObject.cpp 
+    sandbox/ChipmunkPainter.cpp
+  )
+
+  set( APPLE_GUI_IDENTIFIER net.dizanvasquez.Ropeman )
+  set( APPLE_GUI_BUNDLE_NAME Ropeman )
+  
+  set_target_properties(
+    ropeman PROPERTIES
+    MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/macos/AppleInfo.plist
+    MACOSX_PACKAGE_LOCATION MacOSX 
+  )
+
+  target_link_libraries( ropeman flatland ${COCOA_LIB} )
+  
 else ( MACOSX )
   add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
   target_link_libraries( ropeman flatland )

@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Conversion.h"
 #include "Constraint.h"
+#include "Event.h"
 #include "Logger.h"
 #include "Painter.h"
 #include "Shape.h"
@@ -13,16 +14,18 @@ using namespace std;
 Flatland::Engine::Engine( const Configuration & configuration )
   : _configuration( configuration ),
     _bus(),
-    _dispatcher( _bus ),
-    _screen( configuration.getInt( "graphics", "width" ),
+    _window( _bus,
+             configuration.getInt( "graphics", "width" ),
              configuration.getInt( "graphics", "height" ) ),
-    _graphics( _screen ),
+    _graphics( _window ),
     _physicsPeriod( 1.0 / configuration.getDouble( "physics", "fps" ) ),
     _physicsRemainingTime( _physicsPeriod ),
-    _fpsClock( configuration.getDouble( "graphics", "fps" ) ),
+    _fps( configuration.getDouble( "graphics", "fps" ) ),
+    _fpsClock( _fps ),
     _startTime( 0 ),
     _running( true )
 {
+  _bus.subscribe( *this, &Engine::onProcessFrame );
 }
 
 //------------------------------------------------------------------------------
@@ -31,10 +34,6 @@ bool
 Flatland::Engine::step( double delta )
 {
   Logger::debug( "Step at time: " + toString( _fpsClock.seconds() ), "Engine" );
-  bool result = handleEvents();
-  if ( ! result ) {
-    return false;
-  }
   updatePhysics( delta );
   updateGraphics();
   return true;
@@ -42,16 +41,24 @@ Flatland::Engine::step( double delta )
 
 //------------------------------------------------------------------------------
 
+void 
+Flatland::Engine::onProcessFrame( const UpdateEvent & )
+{
+  double delta = _fpsClock.elapsed();
+  Logger::debug( 
+    "Delta: " + toString( delta ) + ", Frequency: " + toString( 1.0 / delta ), 
+    "Engine" 
+  );
+  step( delta );
+}
+
+//------------------------------------------------------------------------------
+
+
 size_t
 Flatland::Engine::run()
 {
-  while ( _running ) {
-    double delta = _fpsClock.tick();
-    Logger::debug( "Delta: " + toString( delta ) + ", Frequency: " + toString( 1.0 / delta ), "Engine" );
-    if ( ! step( delta ) ) {
-      break;
-    }
-  }
+  _window.run( _fps );
   return 0;
 }
 
@@ -89,19 +96,11 @@ Flatland::Engine::running()
 
 //------------------------------------------------------------------------------
 
-bool
-Flatland::Engine::handleEvents()
-{
-  return _dispatcher.dispatch();
-}
-
-//------------------------------------------------------------------------------
-
 void
 Flatland::Engine::updateGraphics()
 {
   _paintQueue.paint( _graphics );
-  _screen.flip();
+  _window.flip();
 }
 
 //------------------------------------------------------------------------------
@@ -269,7 +268,7 @@ Flatland::Engine::setTransform( const Vector2D & center, double rotation, double
 double
 Flatland::Engine::width()
 {
-  return _screen.width();
+  return _window.width();
 }
 
 //------------------------------------------------------------------------------
@@ -277,7 +276,7 @@ Flatland::Engine::width()
 double
 Flatland::Engine::height()
 {
-  return _screen.height();
+  return _window.height();
 }
 
 //------------------------------------------------------------------------------

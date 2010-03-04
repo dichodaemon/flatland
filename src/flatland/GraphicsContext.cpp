@@ -1,21 +1,21 @@
 #include "GraphicsContext.h"
 #include "ClassLoader.h"
 #include "Vector2D.h"
-#include "Screen.h"
+#include "Window.h"
 
 using namespace Flatland;
 
 //------------------------------------------------------------------------------
 
 Flatland::GraphicsContext::GraphicsContext( size_t width, size_t height )
-  : _impl( ClassLoader<GraphicsContextBase>::loadFactory( "newGraphicsContext" )( width, height )  )
+  : _impl( FACTORY( GraphicsContextBase, newGraphicsContext )( width, height )  )
 {
 }
 
 //------------------------------------------------------------------------------
 
-Flatland::GraphicsContext::GraphicsContext( Screen & screen )
-  : _impl( ClassLoader<GraphicsContextBase>::loadFactory<ScreenFactory>( "newGraphicsContextFromScreen" )( *( screen._impl ) ) )
+Flatland::GraphicsContext::GraphicsContext( Window & screen )
+  : _impl( ClassLoader<GraphicsContextBase>::loadFactory<WindowFactory>( "newGraphicsContextFromWindow" )( *( screen._impl ) ) )
 {
 }
 

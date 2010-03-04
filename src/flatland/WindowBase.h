@@ -1,5 +1,5 @@
-#ifndef FLATLAND_SCREEN_BASE_H
-#define FLATLAND_SCREEN_BASE_H
+#ifndef FLATLAND_WINDOW_BASE_H
+#define FLATLAND_WINDOW_BASE_H
 
 
 #include <cstdlib>
@@ -9,18 +9,21 @@ namespace Flatland
 {
 
 
+class Bus;
 class GraphicsContextBase;
 
 
-class ScreenBase
+class WindowBase
 {
 public:
-  typedef  ScreenBase * (*Factory)( size_t, size_t );
-  virtual ~ScreenBase();
+  typedef  WindowBase * (*Factory)( Bus &, size_t, size_t );
+  virtual ~WindowBase();
   virtual void flip() = 0;
   virtual void display( GraphicsContextBase & graphics ) = 0;
   virtual double width()  = 0;
   virtual double height() = 0;
+  virtual void run( double frequency ) = 0;
+
 protected:
   friend class GraphicsContextBase;
 };
@@ -29,4 +32,4 @@ protected:
 }
 
 
-#endif //FLATLAND_SCREEN_BASE_H
+#endif //FLATLAND_WINDOW_BASE_H

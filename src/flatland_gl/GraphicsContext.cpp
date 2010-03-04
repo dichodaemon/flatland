@@ -1,12 +1,24 @@
 #include "GraphicsContext.h"
-#include "Screen.h"
 #include <flatland/Color.h>
+#include <Flatland/Logger.h>
+#include <flatland/Window.h>
+
+#if defined (__APPLE__)
+  #import <OpenGL/OpenGL.h>
+#elif defined ( __linux )
+  #include <GL/gl.h>
+#endif
+
+#include <cstdio>
+
+using Flatland::Window;
 
 //------------------------------------------------------------------------------
 
-GraphicsContext::GraphicsContext( Screen & screen )
-  : _surface( screen._surface ),
-    _owner( false )
+GraphicsContext::GraphicsContext( Window & screen )
+  : _owner( false ),
+    _width( screen.width() ),
+    _height( screen.height() )
 {
 }
 
@@ -15,33 +27,12 @@ GraphicsContext::GraphicsContext( Screen & screen )
 GraphicsContext::GraphicsContext( size_t width, size_t height )
   : _owner( true )
 {
-  Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  rmask = 0xff000000;
-  gmask = 0x00ff0000;
-  bmask = 0x0000ff00;
-  amask = 0x000000ff;
-#else
-  rmask = 0x000000ff;
-  gmask = 0x0000ff00;
-  bmask = 0x00ff0000;
-  amask = 0xff000000;
-#endif
-  _surface = SDL_CreateRGBSurface(
-    SDL_HWSURFACE,
-    width, height, 32,
-    rmask, gmask, bmask, amask
-  );
 }
 
 //------------------------------------------------------------------------------
 
 GraphicsContext::~GraphicsContext()
 {
-  if ( _owner )
-  {
-    SDL_FreeSurface( _surface );
-  }
 }
 
 //------------------------------------------------------------------------------
@@ -49,7 +40,7 @@ GraphicsContext::~GraphicsContext()
 double
 GraphicsContext::width()
 {
-  return _surface->w;
+  return _width;
 }
 
 //------------------------------------------------------------------------------
@@ -57,7 +48,7 @@ GraphicsContext::width()
 double
 GraphicsContext::height()
 {
-  return _surface->h;
+  return _height;
 }
 
 //------------------------------------------------------------------------------
@@ -96,7 +87,8 @@ GraphicsContext::drawLine(
   const Flatland::Color & color,
   size_t thickness
 )
-{
+{ 
+  Flatland::Logger::debug( "Drawing line", "OpenGL" );
   GLfloat vertices[2 * 3] = {
     x1, y1, 0,
     x2, y2, 0
@@ -141,7 +133,7 @@ newGraphicsContext( size_t width, size_t height )
 //------------------------------------------------------------------------------
 
 Flatland::GraphicsContextBase *
-newGraphicsContextFromScreen( Screen & screen )
+newGraphicsContextFromWindow( Window & screen )
 {
   return new GraphicsContext( screen );
 }

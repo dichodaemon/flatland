@@ -5,12 +5,12 @@
 #include "Bus.h"
 #include "Clock.h"
 #include "Configuration.h"
-#include "EventDispatcher.h"
 #include "GraphicsContext.h"
 #include "PaintQueue.h"
-#include "Screen.h"
 #include "Space.h"
+#include "StandardEvents.h"
 #include "Vector2D.h"
+#include "Window.h"
 #include <cstdlib>
 
 
@@ -139,7 +139,8 @@ public:
 
   void gravity( const Vector2D & g );
 
-
+  void onProcessFrame( const UpdateEvent & );
+  
   void setTransform( const Vector2D & center, double rotation, double width );
   double width();
   double height();
@@ -147,20 +148,19 @@ public:
   Vector2D toWorld( const Vector2D & vector );
 
 protected:
-  bool handleEvents();
   void updatePhysics( double delta );
   void updateGraphics();
 
 private:
   const Configuration & _configuration;
   Bus                   _bus;
-  EventDispatcher       _dispatcher;
-  Screen                _screen;
+  Window                _window;
   GraphicsContext       _graphics;
   PaintQueue            _paintQueue;
   Space                 _space;
   double                _physicsPeriod;
   double                _physicsRemainingTime;
+  double                _fps;
   Clock                 _fpsClock;
   bool                  _paused;
   double                _startTime;

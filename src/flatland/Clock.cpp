@@ -38,6 +38,25 @@ Flatland::Clock::tick()
 
 //------------------------------------------------------------------------------
 
+double
+Flatland::Clock::elapsed()
+{
+  if ( _firstTimestamp == 0 && ! _pause ) {
+    _firstTimestamp = seconds();
+    _lastTimestamp  = seconds();
+  }
+  if ( _pause ) {
+    return 0;
+  }
+
+  double current   = seconds();
+  double result    = current - _lastTimestamp;
+  _lastTimestamp   = current;
+  return result;
+}
+
+//------------------------------------------------------------------------------
+
 void
 Flatland::Clock::pause( bool value )
 {

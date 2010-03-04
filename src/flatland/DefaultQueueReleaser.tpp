@@ -1,7 +1,6 @@
-#include "ScreenBase.h"
-
 //------------------------------------------------------------------------------
 
-Flatland::ScreenBase::~ScreenBase()
-{
-}
+template <typename T>
+void 
+DefaultQueueReleaser<T>::release( T )
+{}
