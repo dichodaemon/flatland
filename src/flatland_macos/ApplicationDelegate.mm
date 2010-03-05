@@ -125,7 +125,10 @@
                       backing: NSBackingStoreBuffered
                       defer: NO];
 
-  _view = [[GLView alloc] initWithFrame: NSMakeRect( 0, 0, _width, _height)];
+  _view = [[GLView alloc] 
+    initWithFrame: NSMakeRect( 0, 0, _width, _height)
+    andBus: _bus
+  ];
   [_window makeKeyAndOrderFront: _view];
   [_window makeFirstResponder: _view];
   [_window setContentView: _view];
