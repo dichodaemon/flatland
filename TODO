@@ -6,14 +6,17 @@ Flatland
 * Done: Solve problems in PaintQueue
 * Done: Engine accessors for iterations, damping, etc.
 * Done: Change portability layer to be based on dynamic loading libraries.
+* Done: Reimplement graphics layer using opengl.
 
 * Add: Support for function event handlers, painters.
 * Add: Task scheduler.
 * Fix: Implement painting and physics udpate using scheduler.
-* Add: Reimplement graphics layer using opengl.
 * Fix: Move engine add methods to Space.
 * Fix: Add exceptions in all search operations.
 * Fix: Change all interfaces to use Vector2D where required.
+* Add: Read configuration file in platform dependent location.
+* Add: Fullscreen / window switching capabilities.
+* Add: Joystick/Controller support.
 
 Arde
 

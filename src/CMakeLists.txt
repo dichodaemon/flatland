@@ -49,12 +49,21 @@ sm_cpp_install_binaries( chipmunk )
 # Flatland
 #-------------------------------------------------------------------------------
 
-file( GLOB FLATLAND_SRC flatland/*.cpp )
+include( FindOpenAL )
+
+if( OPENAL_FOUND )
+  message( "OpenAL Found" )
+  include_directories( OPENAL_INCLUDE_DIR )
+else( OPENAL_FOUND )
+  message( "OpenAL not found" )
+endif( OPENAL_FOUND )
 
 find_library( DL_LIB dl )
 
+file( GLOB FLATLAND_SRC flatland/*.cpp )
+
 add_library( flatland SHARED ${FLATLAND_SRC} )
-target_link_libraries( flatland iniparser chipmunk ${DL_LIB} )
+target_link_libraries( flatland iniparser chipmunk ${DL_LIB} ${OPENAL_LIBRARY} )
 
 sm_cpp_install( flatland )
 
@@ -81,16 +90,9 @@ sm_cpp_install( flatland_macos )
 # OpenGL Backend
 #-------------------------------------------------------------------------------
 
-# include( FindOpenAL )
 include( FindOpenGL )
 include( FindSDL )
 
-# if( OPENAL_FOUND )
-#   message( "OpenAL Found" )
-#   include_directories( OPENAL_INCLUDE_DIR )
-# else( OPENAL_FOUND )
-#   message( "OpenAL not found" )
-# endif( OPENAL_FOUND )
 
 if( OPENGL_FOUND )
   message( "OpenGL Found" )

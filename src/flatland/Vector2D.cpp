@@ -18,6 +18,7 @@ Flatland::Vector2D::Vector2D( double angle )
 //------------------------------------------------------------------------------
 
 Flatland::Vector2D::Vector2D( const Vector2D & other )
+  : ChipmunkObject()
 {
   _vector = other._vector;
 }
