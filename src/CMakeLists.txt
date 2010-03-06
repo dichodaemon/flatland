@@ -23,7 +23,6 @@ set_target_properties(
 # Flatland
 #-------------------------------------------------------------------------------
 
-# ADD_DEFINITIONS( -DPLUGIN_LIBRARIES )
 ADD_DEFINITIONS( -DPTHREADS )
 ADD_DEFINITIONS( -DPTHREADS )
 
@@ -74,25 +73,18 @@ endif ( MACOSX )
 
 
 #-------------------------------------------------------------------------------
-# Sandbox
+# Ropeman
 #-------------------------------------------------------------------------------
 
-
-# add_executable( example1 sandbox/example1.cpp )
-# target_link_libraries( example1 flatland )
-
-# add_executable( whip sandbox/whip.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
-# target_link_libraries( whip flatland )
+file( GLOB ROPEMAN_SRC ropeman/*.cpp ) 
+file( GLOB_RECURSE ROPEMAN_RESOURCES ropeman/resources/?*.* ) 
 
 if ( MACOSX )
-  find_library( FOUNDATION_LIB Foundation )
-  
+   
   add_executable( 
     ropeman MACOSX_BUNDLE 
-    sandbox/ropeman.cpp 
-    sandbox/GameObject.cpp 
-    sandbox/ChipmunkPainter.cpp
-    sandbox/SoundManager.cpp
+    ${ROPEMAN_SRC}
+    ${ROPEMAN_RESOURCES}
   )
 
   set( APPLE_GUI_IDENTIFIER net.dizanvasquez.Ropeman )
@@ -104,15 +96,21 @@ if ( MACOSX )
     MACOSX_PACKAGE_LOCATION MacOSX 
   )
 
-  target_link_libraries( 
-    ropeman 
-    flatland 
+  set_source_files_properties(
+    ${ROPEMAN_RESOURCES}
+    PROPERTIES
+    MACOSX_PACKAGE_LOCATION Resources
   )
-  
+
 else ( MACOSX )
-  add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)
-  target_link_libraries( ropeman flatland )
+  add_executable( 
+    ropeman 
+    ${ROPEMAN_SRC}
+  )
+
 endif ( MACOSX )
 
-# add_executable( testsound sandbox/testsound.cpp )
-# target_link_libraries( testsound ${OPENAL_LIBRARY} ${ALUT_LIB} )
+target_link_libraries( 
+  ropeman 
+  flatland 
+)

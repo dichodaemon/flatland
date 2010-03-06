@@ -249,7 +249,9 @@ public:
       _floor( -20, 0, 3000, 0, 0.1 ),
       _ropeMan( 0, 100, 80, 0.4, 1.75 ),
       _rope( NULL ),
-      _painters( _ropeMan, 100, 32 )
+      _painters( _ropeMan, 100, 32 ),
+      _buffer1( "bin/ropeman.app/Contents/Resources/whip.wav" ),  
+      _buffer2( "bin/ropeman.app/Contents/Resources/whoa.wav" )
   {
     initialize();
   }
@@ -336,7 +338,9 @@ public:
     {
       Logger::debug( "Create rope", "Level" );
       if ( hitsBuilding( event() ) )
-      {
+      { 
+        _source.buffer( _buffer1 );
+        _source.play();
         _rope = new Rope( _ropeMan, event().x(), event().y() );
         add( *_rope );
       }
@@ -344,6 +348,8 @@ public:
     else
     {
       Logger::debug( "Destroy rope", "Level" );
+      _source.buffer( _buffer2 );
+      _source.play();
       remove( *_rope );
       delete _rope;
       _rope = NULL;
@@ -353,11 +359,14 @@ public:
 private:
   typedef deque<Building *> Buildings;
   
-  Engine &  _engine;
-  Floor     _floor;
-  RopeMan   _ropeMan;
-  Rope *    _rope;
-  Buildings _buildings;
+  Engine &    _engine;
+  Floor       _floor;
+  RopeMan     _ropeMan;
+  Rope *      _rope;
+  Buildings   _buildings;
+  SoundBuffer _buffer1;
+  SoundBuffer _buffer2;
+  SoundSource _source;
 
   Painters  _painters;
 };
@@ -370,16 +379,8 @@ int main( int argc, char * argv[] )
   // Logger::setLevel( Logger::DEBUG, "OpenGL" );
 
   SoundListener listener;
-  SoundSource source;
-  SoundBuffer buffer( "sound.wav" );
-  source.buffer( buffer );
-  source.play();
 
-  if ( argc != 2 ) {
-    Logger::error( "No configuration file was specified" , "main" );
-    exit( 1 );
-  }
-  Configuration configuration( argv[1] );
+  Configuration configuration( "bin/ropeman.app/Contents/Resources/terraplana.ini" );
 
   ClassLoader<WindowBase>::searchPath(
     configuration.getString( "eventSystem", "libraryPath" )
