@@ -30,10 +30,4 @@ private:
   ApplicationDelegate * _delegate;
 };
 
-extern "C"
-{
-  Flatland::WindowBase * 
-  newWindow( Flatland::Bus & bus, size_t width, size_t height );
-}
-
 #endif //WINDOW_H

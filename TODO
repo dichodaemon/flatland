@@ -17,6 +17,7 @@ Flatland
 * Add: Read configuration file in platform dependent location.
 * Add: Fullscreen / window switching capabilities.
 * Add: Joystick/Controller support.
+* Fix: Destructors/disconnect for Chipmunk constraints.
 
 Arde
 

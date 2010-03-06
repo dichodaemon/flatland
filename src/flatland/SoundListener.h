@@ -3,7 +3,7 @@
 
 
 #include "ALObject.h"
-#include <flatland/Vector2D.h>
+#include "Vector2D.h"
 
 
 namespace Flatland
@@ -17,16 +17,16 @@ public:
   virtual ~SoundListener();
   
   void position( const Vector2D & value );
-  Vector2D position();
+  Vector2D position() const;
   
   void velocity( const Vector2D & value );
-  Vector2D velocity();
+  Vector2D velocity() const;
 
   void orientation( double angle );
-  double orientation();
+  double orientation() const;
   
   void gain( double value );
-  double gain();
+  double gain() const;
 
 private:
   ALObject _al;

@@ -31,5 +31,10 @@ protected:
 
 }
 
+extern "C"
+{
+  Flatland::WindowBase * 
+  newWindow( Flatland::Bus & bus, size_t width, size_t height );
+}
 
 #endif //FLATLAND_WINDOW_BASE_H

@@ -20,6 +20,9 @@
 #include <flatland/SegmentShape.h>
 #include <flatland/SimpleMotor.h>
 #include <flatland/SlideJoint.h>
+#include <flatland/SoundBuffer.h>
+#include <flatland/SoundListener.h>
+#include <flatland/SoundSource.h>
 #include <flatland/TypedEvent.h>
 #include <iostream>
 #include <deque>
@@ -365,6 +368,12 @@ int main( int argc, char * argv[] )
 {
   // Logger::setLevel( Logger::DEBUG, "Engine" );
   // Logger::setLevel( Logger::DEBUG, "OpenGL" );
+
+  SoundListener listener;
+  SoundSource source;
+  SoundBuffer buffer( "sound.wav" );
+  source.buffer( buffer );
+  source.play();
 
   if ( argc != 2 ) {
     Logger::error( "No configuration file was specified" , "main" );

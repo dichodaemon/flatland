@@ -3,11 +3,14 @@
 
 
 #include "ALObject.h"
-#include <flatland/Vector2D.h>
+#include "Vector2D.h"
 
 
 namespace Flatland
 {
+
+
+class SoundBuffer;
 
 
 class SoundSource
@@ -17,19 +20,21 @@ public:
   virtual ~SoundSource();
   
   void position( const Vector2D & value );
-  Vector2D position();
+  Vector2D position() const;
   
   void velocity( const Vector2D & value );
-  Vector2D velocity();
+  Vector2D velocity() const;
   
   void pitch( double value );
-  double pitch();
+  double pitch() const;
   
   void gain( double value );
-  double gain();
+  double gain() const;
   
   void loop( bool value );
-  bool loop();
+  bool loop() const;
+  
+  void buffer( const SoundBuffer & value );
   
   void play();
   void stop();

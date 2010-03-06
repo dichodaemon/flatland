@@ -9,7 +9,7 @@
 namespace Flatland
 {
   class Color;
-  class Window;
+  class WindowBase;
 }
 
 
@@ -17,7 +17,7 @@ class GraphicsContext : public Flatland::GraphicsContextBase
 {
 public:
   GraphicsContext( size_t width, size_t height );
-  GraphicsContext( Flatland::Window & screen );
+  GraphicsContext( Flatland::WindowBase & screen );
   virtual ~GraphicsContext();
 
   double width();
@@ -56,10 +56,5 @@ private:
 
 };
 
-extern "C"
-{
-  Flatland::GraphicsContextBase * newGraphicsContext( size_t width, size_t height );
-  Flatland::GraphicsContextBase * newGraphicsContextFromWindow( Flatland::Window & screen );
-}
 
 #endif //GRAPHICS_CONTEXT_H

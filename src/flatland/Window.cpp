@@ -1,12 +1,11 @@
 #include "Window.h"
-#include "ClassLoader.h"
 #include "GraphicsContextBase.h"
 #include "GraphicsContext.h"
 
 //------------------------------------------------------------------------------
 
 Flatland::Window::Window( Bus & bus, size_t width, size_t height )
-  : _impl( FACTORY( WindowBase, newWindow )( bus, width, height ) )
+  : _impl( newWindow( bus, width, height ) )
 {
 }
 

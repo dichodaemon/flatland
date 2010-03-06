@@ -1,5 +1,4 @@
 #include "GraphicsContext.h"
-#include "ClassLoader.h"
 #include "Vector2D.h"
 #include "Window.h"
 
@@ -8,14 +7,14 @@ using namespace Flatland;
 //------------------------------------------------------------------------------
 
 Flatland::GraphicsContext::GraphicsContext( size_t width, size_t height )
-  : _impl( FACTORY( GraphicsContextBase, newGraphicsContext )( width, height )  )
+  : _impl( newGraphicsContext( width, height )  )
 {
 }
 
 //------------------------------------------------------------------------------
 
 Flatland::GraphicsContext::GraphicsContext( Window & screen )
-  : _impl( ClassLoader<GraphicsContextBase>::loadFactory<WindowFactory>( "newGraphicsContextFromWindow" )( *( screen._impl ) ) )
+  : _impl( newGraphicsContextFromWindow( *( screen._impl ) ) )
 {
 }
 

@@ -11,11 +11,11 @@
 
 #include <cstdio>
 
-using Flatland::Window;
+using Flatland::WindowBase;
 
 //------------------------------------------------------------------------------
 
-GraphicsContext::GraphicsContext( Window & screen )
+GraphicsContext::GraphicsContext( WindowBase & screen )
   : _owner( false ),
     _width( screen.width() ),
     _height( screen.height() )
@@ -133,7 +133,7 @@ newGraphicsContext( size_t width, size_t height )
 //------------------------------------------------------------------------------
 
 Flatland::GraphicsContextBase *
-newGraphicsContextFromWindow( Window & screen )
+newGraphicsContextFromWindow( Flatland::WindowBase & screen )
 {
   return new GraphicsContext( screen );
 }

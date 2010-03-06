@@ -9,13 +9,8 @@
 #include <string>
 #include <dlfcn.h>
 
-#ifdef PLUGIN_LIBRARIES
-  #define FACTORY( CLASSNAME, FACTORYNAME ) \
-  ClassLoader<CLASSNAME>::loadFactory( #FACTORYNAME )
-#else
-  #define FACTORY( CLASSNAME, FACTORYNAME ) \
-  FACTORYNAME
-#endif
+#define FACTORY( CLASSNAME, FACTORYNAME ) \
+ClassLoader<CLASSNAME>::loadFactory( #FACTORYNAME )
 
 
 namespace Flatland

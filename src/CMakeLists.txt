@@ -1,33 +1,10 @@
-ADD_DEFINITIONS( -DPLUGIN_LIBRARIES )
-ADD_DEFINITIONS( -DPTHREADS )
-
-
 #-------------------------------------------------------------------------------
 # Iniparser
 #-------------------------------------------------------------------------------
 
 file( GLOB INIPARSER_SRC iniparser/*.c )
 
-add_library( iniparser SHARED ${INIPARSER_SRC} )
-
-sm_cpp_install_binaries( iniparser )
-
-#-------------------------------------------------------------------------------
-# Ftgl
-#-------------------------------------------------------------------------------
-# 
-# file(
-#   GLOB FTGL_SRC
-#   ftgl/*.cpp
-#   ftgl/FTFont/*.cpp
-#   ftgl/FTGL/*.cpp
-#   ftgl/FTGlyph/*.cpp
-#   ftgl/FTLayout/*.cpp
-# )
-
-# add_library( ftgl SHARED ${FTGL_SRC} )
-
-# sm_cpp_install_binaries( ftgl )
+add_library( iniparser ${INIPARSER_SRC} )
 
 #-------------------------------------------------------------------------------
 # Chipmunk
@@ -35,61 +12,22 @@ sm_cpp_install_binaries( iniparser )
 
 file( GLOB CHIPMUNK_SRC chipmunk/*.c chipmunk/constraints/*.c )
 
-add_library( chipmunk SHARED ${CHIPMUNK_SRC} )
+add_library( chipmunk ${CHIPMUNK_SRC} )
 set_target_properties(
   chipmunk
   PROPERTIES COMPILE_FLAGS "-std=gnu99 -ffast-math"
   DEFINE_SYMBOL NDEBUG
 )
 
-sm_cpp_install_binaries( chipmunk )
-
-
 #-------------------------------------------------------------------------------
 # Flatland
 #-------------------------------------------------------------------------------
 
+# ADD_DEFINITIONS( -DPLUGIN_LIBRARIES )
+ADD_DEFINITIONS( -DPTHREADS )
+ADD_DEFINITIONS( -DPTHREADS )
+
 include( FindOpenAL )
-
-if( OPENAL_FOUND )
-  message( "OpenAL Found" )
-  include_directories( OPENAL_INCLUDE_DIR )
-else( OPENAL_FOUND )
-  message( "OpenAL not found" )
-endif( OPENAL_FOUND )
-
-find_library( DL_LIB dl )
-
-file( GLOB FLATLAND_SRC flatland/*.cpp )
-
-add_library( flatland SHARED ${FLATLAND_SRC} )
-target_link_libraries( flatland iniparser chipmunk ${DL_LIB} ${OPENAL_LIBRARY} )
-
-sm_cpp_install( flatland )
-
-#-------------------------------------------------------------------------------
-# MacOS Backend
-#-------------------------------------------------------------------------------
-
-find_library( COCOA_LIB Cocoa )
-
-file( GLOB FLATLAND_MACOS_SRC flatland_macos/*.mm )
-
-add_library( flatland_macos SHARED ${FLATLAND_MACOS_SRC} )
-target_link_libraries(
-  flatland_macos
-  iniparser
-  chipmunk
-  flatland
-  ${COCOA_LIB}
-)
-
-sm_cpp_install( flatland_macos )
-
-#-------------------------------------------------------------------------------
-# OpenGL Backend
-#-------------------------------------------------------------------------------
-
 include( FindOpenGL )
 include( FindSDL )
 
@@ -101,27 +39,39 @@ else( OPENGL_FOUND )
   message( "OpenGL not found" )
 endif( OPENGL_FOUND )  
 
-if( SDL_FOUND )
-  include_directories( SDL_INCLUDE_DIR )
-else( SDL_FOUND )
-  message( "SDL not found" )
-endif( SDL_FOUND )
+if( OPENAL_FOUND )
+  message( "OpenAL Found" )
+  include_directories( OPENAL_INCLUDE_DIR )
+else( OPENAL_FOUND )
+  message( "OpenAL not found" )
+endif( OPENAL_FOUND )
 
-# find_library( ALUT_LIB alut )
+file( GLOB FLATLAND_SRC flatland/*.cpp )
+
+if( MACOSX )
+  file( GLOB FLATLAND_MACOS_SRC flatland_macos/*.mm )
+  set( FLATLAND_SRC ${FLATLAND_SRC} ${FLATLAND_MACOS_SRC} )
+endif( MACOSX )
 
 file( GLOB FLATLAND_GL_SRC flatland_gl/*.cpp )
+set( FLATLAND_SRC ${FLATLAND_SRC} ${FLATLAND_GL_SRC} )
 
-add_library( flatland_gl SHARED ${FLATLAND_GL_SRC} )
-target_link_libraries(
-  flatland_gl
-  iniparser
-  chipmunk
-  flatland
-  ${SDL_LIBRARY}
+add_library( flatland ${FLATLAND_SRC} )
+target_link_libraries( 
+  flatland 
+  iniparser 
+  chipmunk 
+  ${OPENAL_LIBRARY} 
   ${OPENGL_gl_LIBRARY}
 )
 
-sm_cpp_install( flatland_gl )
+
+if ( MACOSX )
+  find_library( COCOA_LIB Cocoa )
+  find_library( AUDIO_TOOLBOX_LIB AudioToolbox )
+  target_link_libraries( flatland ${AUDIO_TOOLBOX_LIB} ${COCOA_LIB} )
+endif ( MACOSX )
+
 
 #-------------------------------------------------------------------------------
 # Sandbox
@@ -142,6 +92,7 @@ if ( MACOSX )
     sandbox/ropeman.cpp 
     sandbox/GameObject.cpp 
     sandbox/ChipmunkPainter.cpp
+    sandbox/SoundManager.cpp
   )
 
   set( APPLE_GUI_IDENTIFIER net.dizanvasquez.Ropeman )
@@ -153,7 +104,10 @@ if ( MACOSX )
     MACOSX_PACKAGE_LOCATION MacOSX 
   )
 
-  target_link_libraries( ropeman flatland ${COCOA_LIB} )
+  target_link_libraries( 
+    ropeman 
+    flatland 
+  )
   
 else ( MACOSX )
   add_executable( ropeman sandbox/ropeman.cpp sandbox/GameObject.cpp sandbox/ChipmunkPainter.cpp)

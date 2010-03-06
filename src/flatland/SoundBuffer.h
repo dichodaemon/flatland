@@ -16,10 +16,12 @@ public:
   SoundBuffer( const std::string & filename );
   virtual ~SoundBuffer();
   
-  int frequency();
-  int size();
-  int bitsPerSample();
-  int channels();
+  operator int() const;
+  
+  int frequency() const;
+  int size() const ;
+  int bitsPerSample() const;
+  int channels() const;
   
 private:
   ALObject _al;

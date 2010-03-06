@@ -3,7 +3,6 @@
 
 
 #include "Vector2D.h"
-#include "ChipmunkObject.h"
 
 
 namespace Flatland
@@ -64,8 +63,8 @@ private:
 
   friend class Space;
 
-  bool     _owner;
-  cpBody * _body;
+  bool           _owner;
+  cpBody *       _body;
 };
 
 

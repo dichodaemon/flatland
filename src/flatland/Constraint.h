@@ -24,7 +24,7 @@ public:
   void maxBias( double value );
 protected:
   friend class Space;
-
+  ChipmunkObject _chipmunk;
   cpConstraint * _constraint;
 };
 

@@ -50,11 +50,19 @@ public:
   virtual void clear( const Color & color ) = 0;
 
 private:
-  friend class WindowBase;
+  friend class Window;
 };
 
 
 }
 
+extern "C"
+{
+  Flatland::GraphicsContextBase * 
+  newGraphicsContext( size_t width, size_t height );
+
+  Flatland::GraphicsContextBase * 
+  newGraphicsContextFromWindow( Flatland::WindowBase & window );
+}
 
 #endif //FLATLAND_GRAPHICS_CONTEXT_BASE_H

@@ -5,14 +5,16 @@ using namespace Flatland;
 //------------------------------------------------------------------------------
 
 Flatland::Body::Body( const Body & body )
-  : _body( body._body )
+  : ChipmunkObject(),
+    _body( body._body )
 {
 }
 
 //------------------------------------------------------------------------------
 
 Flatland::Body::Body( double mass, double moment )
-  : _owner( true )
+  : ChipmunkObject(),
+    _owner( true )
 {
   _body = cpBodyNew( mass, moment );
 }
@@ -20,7 +22,8 @@ Flatland::Body::Body( double mass, double moment )
 //------------------------------------------------------------------------------
 
 Flatland::Body::Body( cpBody * body )
-  : _owner( false )
+  : ChipmunkObject(),
+    _owner( false )
 {
   _body = body;
 }

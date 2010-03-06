@@ -1,4 +1,5 @@
 #include "SoundSource.h"
+#include "SoundBuffer.h"
 
 using namespace Flatland;
 
@@ -28,7 +29,7 @@ SoundSource::position( const Vector2D & value )
 //------------------------------------------------------------------------------
 
 Vector2D 
-SoundSource::position()
+SoundSource::position() const
 {
   ALfloat v[] = { 0.0, 0.0, 0.0 }; 
   alGetSourcefv( _source, AL_POSITION, v ); 
@@ -47,7 +48,7 @@ SoundSource::velocity( const Vector2D & value )
 //------------------------------------------------------------------------------
 
 Vector2D 
-SoundSource::velocity()
+SoundSource::velocity() const
 {
   ALfloat v[] = { 0.0, 0.0, 0.0 }; 
   alGetSourcefv( _source, AL_VELOCITY, v ); 
@@ -65,7 +66,7 @@ SoundSource::pitch( double value )
 //------------------------------------------------------------------------------
 
 double 
-SoundSource::pitch()
+SoundSource::pitch() const
 {
   ALfloat result;
   alGetSourcef( _source, AL_PITCH, &result );
@@ -83,7 +84,7 @@ SoundSource::gain( double value )
 //------------------------------------------------------------------------------
 
 double 
-SoundSource::gain()
+SoundSource::gain() const
 {
   ALfloat result;
   alGetSourcef( _source, AL_GAIN, &result );
@@ -101,11 +102,19 @@ SoundSource::loop( bool value )
 //------------------------------------------------------------------------------
 
 bool 
-SoundSource::loop()
+SoundSource::loop() const
 {
   int result;
   alGetSourcei( _source, AL_LOOPING, &result );
   return result;
+}
+
+//------------------------------------------------------------------------------
+
+void 
+SoundSource::buffer( const SoundBuffer & value )
+{
+  alSourcei( _source, AL_BUFFER, value ); 
 }
 
 //------------------------------------------------------------------------------

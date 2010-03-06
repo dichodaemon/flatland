@@ -5,11 +5,11 @@ using namespace Flatland;
 
 //------------------------------------------------------------------------------
 
-size_t Flatland::ChipmunkObject::_references = 0;
+size_t ChipmunkObject::_references = 0;
 
 //------------------------------------------------------------------------------
 
-Flatland::ChipmunkObject::ChipmunkObject()
+ChipmunkObject::ChipmunkObject()
 {
   if ( _references == 0 ) {
     Logger::info( "Initializing Chipmunk", "Chipmunk" );
@@ -19,8 +19,7 @@ Flatland::ChipmunkObject::ChipmunkObject()
 }
 
 //------------------------------------------------------------------------------
-
-Flatland::ChipmunkObject::~ChipmunkObject()
+ChipmunkObject::~ChipmunkObject()
 {
   _references--;
   if ( _references == 0 ) {

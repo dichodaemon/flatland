@@ -26,7 +26,7 @@ SoundListener::position( const Vector2D & value )
 //------------------------------------------------------------------------------
 
 Vector2D 
-SoundListener::position()
+SoundListener::position() const
 {
   ALfloat v[] = { 0.0, 0.0, 0.0 }; 
   alGetListenerfv( AL_POSITION, v ); 
@@ -45,7 +45,7 @@ SoundListener::velocity( const Vector2D & value )
 //------------------------------------------------------------------------------
 
 Vector2D 
-SoundListener::velocity()
+SoundListener::velocity() const
 {
   ALfloat v[] = { 0.0, 0.0, 0.0 }; 
   alGetListenerfv( AL_VELOCITY, v ); 
@@ -63,7 +63,7 @@ SoundListener::orientation( double value )
 //------------------------------------------------------------------------------
 
 double 
-SoundListener::orientation()
+SoundListener::orientation() const
 {
   // double result;
   // alGetListenerf( AL_GAIN, &result );
@@ -81,7 +81,7 @@ SoundListener::gain( double value )
 //------------------------------------------------------------------------------
 
 double 
-SoundListener::gain()
+SoundListener::gain() const
 {
   ALfloat result;
   alGetListenerf( AL_GAIN, &result );

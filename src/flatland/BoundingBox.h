@@ -2,15 +2,15 @@
 #define FLATLAND_BOUNDING_BOX_H
 
 
-#include "Vector2D.h"
 #include "ChipmunkObject.h"
+#include "Vector2D.h"
 
 
 namespace Flatland
 {
 
 
-class BoundingBox : public ChipmunkObject
+class BoundingBox
 {
 public:
   BoundingBox( float x1, float y1, float x2, float y2 );
@@ -26,7 +26,8 @@ public:
   
   
 private:
-  cpBB _bb;
+  ChipmunkObject _chipmunk;
+  cpBB           _bb;
 };
 
 

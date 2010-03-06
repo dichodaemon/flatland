@@ -9,7 +9,7 @@ namespace Flatland
 {
 
 
-class Vector2D : public ChipmunkObject
+class Vector2D
 {
 public:
   Vector2D();
@@ -48,7 +48,8 @@ public:
   double angle();
   
 private:
-  cpVect _vector;
+  ChipmunkObject _chipmunk;
+  cpVect         _vector;
   
 };
 

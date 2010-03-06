@@ -5,11 +5,11 @@ using namespace Flatland;
 
 //------------------------------------------------------------------------------
 
-size_t Flatland::ALObject::_references = 0;
+size_t ALObject::_references = 0;
 
 //------------------------------------------------------------------------------
 
-Flatland::ALObject::ALObject()
+ALObject::ALObject()
 {
   if ( _references == 0 ) {
     Logger::info( "Initializing OpenAL", "OpenAL" );
@@ -26,7 +26,7 @@ Flatland::ALObject::ALObject()
 
 //------------------------------------------------------------------------------
 
-Flatland::ALObject::~ALObject()
+ALObject::~ALObject()
 {
   _references--;
   if ( _references == 0 ) {
