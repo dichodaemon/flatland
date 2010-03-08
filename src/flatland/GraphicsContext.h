@@ -3,8 +3,6 @@
 
 
 #include "GraphicsContextBase.h"
-#include "Transform.h"
-#include "Vector2D.h"
 #include <cstdlib>
 
 
@@ -12,10 +10,8 @@ namespace Flatland
 {
 
 
-class Color;
-class WindowBase;
 class Window;
-
+  
 
 class GraphicsContext : public GraphicsContextBase
 {
@@ -27,12 +23,13 @@ public:
   
   virtual ~GraphicsContext();
 
-  double width();
-  double height();
-
-  void setTransform( const Vector2D & center, double rotation, double width );
   Vector2D toGraphics( const Vector2D & vector );
   Vector2D toWorld( const Vector2D & vector );
+
+  void setTransform( const Vector2D & center, double rotation, double width );
+  
+  double width();
+  double height();
 
   void drawCircle(
     double x,
@@ -84,13 +81,19 @@ public:
     size_t thickness,
     bool imageCoordinates
   );
+  
+  void drawImage( 
+    const Image & image, 
+    const Transform & transform, 
+    double width, 
+    double height 
+  );
 
   void clear( const Color & color );
 
 private:
   friend class Window;
   GraphicsContextBase * _impl;
-  Transform             _transform;
 };
 
 

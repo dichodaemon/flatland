@@ -21,12 +21,29 @@ Flatland::GraphicsContext::GraphicsContext( Window & screen )
 //------------------------------------------------------------------------------
 
 void
-Flatland::GraphicsContext::setTransform( const Vector2D & center, double rotation, double width  )
+Flatland::GraphicsContext::setTransform( 
+  const Vector2D & center, 
+  double rotation, 
+  double width  
+)
 {
-  _transform.translation( center );
-  _transform.rotation( rotation );
-  double scale = width / this->width();
-  _transform.scale( Vector2D( scale, scale ) );
+  _impl->setTransform( center, rotation, width );
+}
+
+//------------------------------------------------------------------------------
+
+Vector2D
+Flatland::GraphicsContext::toGraphics( const Vector2D & vector )
+{
+  return  _impl->toGraphics( vector );
+}
+
+//------------------------------------------------------------------------------
+
+Vector2D
+Flatland::GraphicsContext::toWorld( const Vector2D & vector )
+{
+  return  _impl->toWorld( vector );
 }
 
 //------------------------------------------------------------------------------
@@ -43,22 +60,6 @@ double
 Flatland::GraphicsContext::height()
 {
   return _impl->height();
-}
-
-//------------------------------------------------------------------------------
-
-Vector2D
-Flatland::GraphicsContext::toGraphics( const Vector2D & vector )
-{
-  return  _transform.fromParent( vector );
-}
-
-//------------------------------------------------------------------------------
-
-Vector2D
-Flatland::GraphicsContext::toWorld( const Vector2D & vector )
-{
-  return  _transform.toParent( vector );
 }
 
 //------------------------------------------------------------------------------
@@ -197,6 +198,19 @@ Flatland::GraphicsContext::drawLine(
   Vector2D v1 = toGraphics( Vector2D( x1, y1 ) );
   Vector2D v2 = toGraphics( Vector2D( x2, y2 ) );
   _impl->drawLine( v1.x(), v1.y(), v2.x(), v2.y(), color, thickness );
+}
+
+//------------------------------------------------------------------------------
+
+void 
+Flatland::GraphicsContext::drawImage( 
+  const Flatland::Image & image, 
+  const Flatland::Transform & transform, 
+  double width, 
+  double height 
+)
+{
+  _impl->drawImage( image, transform, width, height );
 }
 
 //------------------------------------------------------------------------------

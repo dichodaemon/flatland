@@ -7,6 +7,7 @@ Flatland
 * Done: Engine accessors for iterations, damping, etc.
 * Done: Change portability layer to be based on dynamic loading libraries.
 * Done: Reimplement graphics layer using opengl.
+* Done: Get rid of graphics context / image divergence.
 
 * Add: Support for function event handlers, painters.
 * Add: Task scheduler.
@@ -19,7 +20,10 @@ Flatland
 * Add: Joystick/Controller support.
 * Fix: Destructors/disconnect for Chipmunk constraints.
 * Add: Text rendering.
-* Add: Image loading / Image Atlas.
+* Add: Image loading 
+* Add: Image Atlas.
+* Fix: Image should be implemented in flatland_gl.
+* Add: Pass transform to graphics context to describe local object.
 
 Arde
 

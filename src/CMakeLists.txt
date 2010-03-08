@@ -20,6 +20,18 @@ set_target_properties(
 )
 
 #-------------------------------------------------------------------------------
+# Soil
+#-------------------------------------------------------------------------------
+
+file( GLOB SOIL_SRC soil/*.c  )
+
+add_library( soil ${SOIL_SRC} )
+set_target_properties(
+  soil
+  PROPERTIES COMPILE_FLAGS "-std=gnu99 -ffast-math"
+)
+
+#-------------------------------------------------------------------------------
 # Flatland
 #-------------------------------------------------------------------------------
 
@@ -60,6 +72,7 @@ target_link_libraries(
   flatland 
   iniparser 
   chipmunk 
+  soil
   ${OPENAL_LIBRARY} 
   ${OPENGL_gl_LIBRARY}
 )
@@ -77,7 +90,7 @@ endif ( MACOSX )
 #-------------------------------------------------------------------------------
 
 file( GLOB ROPEMAN_SRC ropeman/*.cpp ) 
-file( GLOB_RECURSE ROPEMAN_RESOURCES ropeman/resources/?*.* ) 
+file( GLOB_RECURSE ROPEMAN_RESOURCES ropeman/resources/* ) 
 
 if ( MACOSX )
    

@@ -8,6 +8,7 @@
 #include <flatland/Engine.h>
 #include "GameObject.h"
 #include <flatland/GearJoint.h>
+#include <flatland/Image.h>
 #include <flatland/KeyPressedEvent.h>
 #include <flatland/KeyReleasedEvent.h>
 #include <flatland/Logger.h>
@@ -140,11 +141,14 @@ class RopeMan : public GameObject
 {
 public:
   RopeMan( double x, double y, double mass, double width, double height )
+    : _image( NULL ),
+      _width( width ),
+      _height( height )
   {
     _body = new Body( mass, mass * ( width * width + height * height ) / 12.0 );
     _body->position( Vector2D( x, y ) );
     addObject( _body );
-    
+
     PolygonShape::VertexList square( 4 );
     square[0] = Vector2D( -width / 2, -height / 2 );
     square[1] = Vector2D( -width / 2,  height / 2 );
@@ -157,11 +161,36 @@ public:
     s->friction( 1 );
     addObject( s );
   }
+  
+  virtual ~RopeMan()
+  {
+    if ( _image != NULL ) {
+      delete _image;
+    }
+  }
+
+  void
+  paint( GraphicsContext & graphics )
+  {
+    GameObject::paint( graphics );
+    if ( _image == NULL ) {      
+      _image = new Image( "bin/ropeman.app/Contents/Resources/ropeman.png" );
+    }
+    _transform.translation( _body->position() );
+    _transform.rotation( _body->angle() );
+    graphics.drawImage( *_image, _transform, _width, _height );
+  }
 
   Body & body()
   {
     return *_body;
   }
+
+private:
+  Transform _transform;
+  Image *   _image;
+  double    _width;
+  double    _height;
 };
 
 //------------------------------------------------------------------------------
@@ -247,9 +276,9 @@ public:
   Level( Engine & engine )
     : _engine( engine ),
       _floor( -20, 0, 3000, 0, 0.1 ),
-      _ropeMan( 0, 100, 80, 0.4, 1.75 ),
+      _ropeMan( 0, 100, 80, 1.75, 1.75 ),
       _rope( NULL ),
-      _painters( _ropeMan, 100, 32 ),
+      _painters( _ropeMan, 50, 16 ),
       _buffer1( "bin/ropeman.app/Contents/Resources/whip.wav" ),  
       _buffer2( "bin/ropeman.app/Contents/Resources/whoa.wav" )
   {
@@ -339,8 +368,8 @@ public:
       Logger::debug( "Create rope", "Level" );
       if ( hitsBuilding( event() ) )
       { 
-        _source.buffer( _buffer1 );
-        _source.play();
+        _source1.buffer( _buffer1 );
+        _source1.play();
         _rope = new Rope( _ropeMan, event().x(), event().y() );
         add( *_rope );
       }
@@ -348,8 +377,8 @@ public:
     else
     {
       Logger::debug( "Destroy rope", "Level" );
-      _source.buffer( _buffer2 );
-      _source.play();
+      _source2.buffer( _buffer2 );
+      _source2.play();
       remove( *_rope );
       delete _rope;
       _rope = NULL;
@@ -364,11 +393,12 @@ private:
   RopeMan     _ropeMan;
   Rope *      _rope;
   Buildings   _buildings;
+  Painters    _painters;
   SoundBuffer _buffer1;
   SoundBuffer _buffer2;
-  SoundSource _source;
+  SoundSource _source1;
+  SoundSource _source2;
 
-  Painters  _painters;
 };
 
 //------------------------------------------------------------------------------

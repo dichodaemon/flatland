@@ -46,6 +46,13 @@ public:
     const Flatland::Color & color,
     size_t thickness
   );
+  
+  void drawImage( 
+    const Flatland::Image & image, 
+    const Flatland::Transform & transform, 
+    double width, 
+    double height 
+  );
 
   void clear( const Flatland::Color & color );
 
