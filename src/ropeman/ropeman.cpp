@@ -24,6 +24,7 @@
 #include <flatland/SoundBuffer.h>
 #include <flatland/SoundListener.h>
 #include <flatland/SoundSource.h>
+// #include <flatland/Text.h>
 #include <flatland/TypedEvent.h>
 #include <iostream>
 #include <deque>
@@ -39,9 +40,7 @@ class EventHandler
 {
 public:
   EventHandler( Engine & engine )
-    : _engine( engine ),
-      _rotation( 0 ),
-      _width( 100 )
+    : _engine( engine )
   {
     engine.subscribe( *this, &EventHandler::onKeyPressed );
     engine.subscribe( *this, &EventHandler::onMouseDown );
@@ -54,20 +53,16 @@ public:
         _engine.stop();
         break;
       case KeyboardEvent::KEY_a:
-        _rotation += M_PI / 20;
-        _engine.send( "ROTATE", TypedEvent<double>( _rotation ) );
+        _engine.send( "ROTATE_LEFT", Event() );
         break;
       case KeyboardEvent::KEY_d:
-        _rotation -= M_PI / 20;
-        _engine.send( "ROTATE", TypedEvent<double>( _rotation ) );
+        _engine.send( "ROTATE_RIGHT", Event() );
         break;
       case KeyboardEvent::KEY_w:
-        _width *= 1.1;
-        _engine.send( "ZOOM", TypedEvent<double>( _width ) );
+        _engine.send( "ZOOM_IN", Event() );
         break;
       case KeyboardEvent::KEY_s:
-        _width /= 1.1;
-        _engine.send( "ZOOM", TypedEvent<double>( _width ) );
+        _engine.send( "ZOOM_OUT", Event() );
         break;
       default:
         break;
@@ -89,8 +84,7 @@ public:
 
 private:
   Engine & _engine;
-  double   _rotation;
-  double   _width;
+
 };
 
 //------------------------------------------------------------------------------
@@ -106,14 +100,24 @@ public:
   {
   }
 
-  void onRotate( const TypedEvent<double> & event )
+  void onRotateLeft( const Event & event )
   {
-    _rotation = event();
+    _rotation += 0.1;
   }
   
-  void onZoom( const TypedEvent<double> & event )
+  void onZoomIn( const Event & event )
   {
-    _width = event();
+    _width /= 1.1;
+  }
+
+  void onRotateRight( const Event & event )
+  {
+    _rotation -= 0.1;
+  }
+  
+  void onZoomOut( const Event & event )
+  {
+    _width *= 1.1;
   }
 
   void center( GraphicsContext & graphics )
@@ -142,6 +146,7 @@ class RopeMan : public GameObject
 public:
   RopeMan( double x, double y, double mass, double width, double height )
     : _image( NULL ),
+      // _text( NULL),
       _width( width ),
       _height( height )
   {
@@ -167,18 +172,26 @@ public:
     if ( _image != NULL ) {
       delete _image;
     }
+    
+    // if ( _text != NULL ) {
+    //   delete _text;
+    // }
   }
 
   void
   paint( GraphicsContext & graphics )
   {
-    GameObject::paint( graphics );
     if ( _image == NULL ) {      
       _image = new Image( "bin/ropeman.app/Contents/Resources/ropeman.png" );
     }
+    // if ( _text == NULL ) {
+    //   _text = new Text();
+    //   (*_text)( "Haha"); 
+    // }
     _transform.translation( _body->position() );
     _transform.rotation( _body->angle() );
     graphics.drawImage( *_image, _transform, _width, _height );
+    // _text->draw();
   }
 
   Body & body()
@@ -189,6 +202,7 @@ public:
 private:
   Transform _transform;
   Image *   _image;
+  // Text *    _text;
   double    _width;
   double    _height;
 };
@@ -276,9 +290,9 @@ public:
   Level( Engine & engine )
     : _engine( engine ),
       _floor( -20, 0, 3000, 0, 0.1 ),
-      _ropeMan( 0, 100, 80, 1.75, 1.75 ),
+      _ropeMan( 0, 100, 80, 7.5, 7.5 ),
       _rope( NULL ),
-      _painters( _ropeMan, 50, 16 ),
+      _painters( _ropeMan, 60, 16 ),
       _buffer1( "bin/ropeman.app/Contents/Resources/whip.wav" ),  
       _buffer2( "bin/ropeman.app/Contents/Resources/whoa.wav" )
   {
@@ -302,8 +316,10 @@ public:
   void initialize()
   {
     _engine.subscribe( "ROPE_TOGGLE", *this, &Level::onToggleRope );
-    _engine.subscribe( "ROTATE", _painters, &Painters::onRotate );
-    _engine.subscribe( "ZOOM", _painters, &Painters::onZoom );
+    _engine.subscribe( "ROTATE_LEFT", _painters, &Painters::onRotateLeft );
+    _engine.subscribe( "ROTATE_RIGHT", _painters, &Painters::onRotateRight );
+    _engine.subscribe( "ZOOM_IN", _painters, &Painters::onZoomIn );
+    _engine.subscribe( "ZOOM_OUT", _painters, &Painters::onZoomOut );
     _engine.addPainter( _painters, &Painters::clear, -1E6 );
     _engine.addPainter( _painters, &Painters::center, -1E6 );
     add( _floor );

@@ -9,7 +9,7 @@ Flatland::WrongKeyException::WrongKeyException( const std::string & message )
 
 //------------------------------------------------------------------------------
 
-Flatland::ClassLoadingError::ClassLoadingError( const std::string & message )
+Flatland::FileLoadError::FileLoadError( const std::string & message )
   : runtime_error( message )
 {
 }

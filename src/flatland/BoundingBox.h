@@ -13,7 +13,12 @@ namespace Flatland
 class BoundingBox
 {
 public:
-  BoundingBox( float x1, float y1, float x2, float y2 );
+  BoundingBox(
+    double left = 0, 
+    double top = 0, 
+    double right = 0, 
+    double bottom = 0 
+  );
   BoundingBox( const cpBB & bb );
   operator const cpBB & () const;
   bool intersects( const BoundingBox & other ) const;
@@ -23,6 +28,16 @@ public:
   BoundingBox merge( const Vector2D & other ) const;
   Vector2D clamp( const Vector2D & other ) const;
   Vector2D wrap( const Vector2D & other ) const;
+  
+  double left() const;
+  double top() const;
+  double right() const;
+  double bottom() const;
+
+  void left( double value );
+  void top( double value );
+  void right( double value );
+  void bottom( double value );
   
   
 private:

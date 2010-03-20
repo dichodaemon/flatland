@@ -182,6 +182,8 @@ GraphicsContext::clear( const Flatland::Color & color )
   glOrtho( -width() / 2.0, width() / 2.0, -height() / 2.0, height() / 2.0, -1.0f, 1.0f );
   glMatrixMode( GL_MODELVIEW );
   
+  glColor4f( 255, 255, 255, 255 );
+  
   glDisable( GL_LIGHTING );
   glEnable( GL_BLEND );
   

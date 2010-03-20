@@ -11,14 +11,16 @@ class GraphicsContext;
 class Image : public Flatland::ImageBase
 {
 public:
-  Image( const std::string & filename );
+  Image();
+  Image( const std::string & filename );  
+  void fromBuffer( const uint8_t * buffer, size_t size );
   virtual ~Image();
   
   int index() const;
 
 private:
   friend class ::GraphicsContext;
-  int _image;
+  uint32_t _image;
 }; 
  
 #endif //IMAGE_H

@@ -2,12 +2,17 @@
 
 //------------------------------------------------------------------------------
 
-Flatland::BoundingBox::BoundingBox( float x1, float y1, float x2, float y2 )
+Flatland::BoundingBox::BoundingBox( 
+  double left, 
+  double top, 
+  double right, 
+  double bottom 
+)
 {
-  _bb.l = x1;
-  _bb.t = y1;
-  _bb.r = x2;
-  _bb.b = y2;
+  _bb.l = left;
+  _bb.t = top;
+  _bb.r = right;
+  _bb.b = bottom;
 }
 
 //------------------------------------------------------------------------------
@@ -80,4 +85,66 @@ Flatland::BoundingBox::wrap( const Vector2D & other ) const
   return cpBBWrapVect( _bb, other );
 }
 
+//------------------------------------------------------------------------------
 
+double
+Flatland::BoundingBox::left() const
+{
+  return _bb.l;
+}
+
+//------------------------------------------------------------------------------
+
+double
+Flatland::BoundingBox::top() const
+{
+  return _bb.t;
+}
+
+//------------------------------------------------------------------------------
+
+double
+Flatland::BoundingBox::right() const
+{
+  return _bb.r;
+}
+
+//------------------------------------------------------------------------------
+
+double
+Flatland::BoundingBox::bottom() const
+{
+  return _bb.b;
+}
+
+//------------------------------------------------------------------------------
+
+void
+Flatland::BoundingBox::left( double value )
+{
+  _bb.l = value;
+}
+
+//------------------------------------------------------------------------------
+
+void
+Flatland::BoundingBox::top( double value )
+{
+  _bb.t = value;
+}
+
+//------------------------------------------------------------------------------
+
+void
+Flatland::BoundingBox::right( double value )
+{
+  _bb.r = value;
+}
+
+//------------------------------------------------------------------------------
+
+void
+Flatland::BoundingBox::bottom( double value )
+{
+  _bb.b = value;
+}

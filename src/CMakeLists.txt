@@ -32,6 +32,61 @@ set_target_properties(
 )
 
 #-------------------------------------------------------------------------------
+# Freetype
+#-------------------------------------------------------------------------------
+
+file( GLOB FREETYPE_SRC 
+  freetype/autofit/*.c  
+  freetype/base/*.c  
+  freetype/bdf/*.c  
+  freetype/cache/*.c  
+  freetype/cff/*.c  
+  freetype/cid/*.c  
+  # freetype/gxvalid/*.c  
+  freetype/gzip/*.c  
+  freetype/lzw/*.c  
+  # freetype/otvalid/*.c  
+  freetype/pcf/*.c  
+  freetype/pfr/*.c  
+  freetype/psaux/*.c  
+  freetype/pshinter/*.c  
+  freetype/psnames/*.c  
+  freetype/raster/*.c  
+  freetype/sfnt/*.c  
+  freetype/smooth/*.c  
+  # freetype/tools/*.c  
+  freetype/truetype/*.c  
+  freetype/type1/*.c  
+  freetype/type42/*.c  
+  freetype/winfonts/*.c  
+)
+
+add_library( freetype ${FREETYPE_SRC} )
+set_target_properties(
+  freetype
+  PROPERTIES COMPILE_FLAGS "-std=gnu99 -ffast-math -DFT2_BUILD_LIBRARY -DAF_SCRIPT_LATIN2"
+)
+
+include_directories( freetype )
+
+#-------------------------------------------------------------------------------
+# FTGL
+#-------------------------------------------------------------------------------
+
+file( GLOB FTGL_SRC 
+  ftgl/*.cpp  
+  # ftgl/FreeTypeObject.cpp
+)
+
+add_library( ftgl ${FTGL_SRC} )
+set_target_properties(
+  ftgl
+  PROPERTIES COMPILE_FLAGS "-ffast-math"
+)
+
+include_directories( ftgl )
+
+#-------------------------------------------------------------------------------
 # Flatland
 #-------------------------------------------------------------------------------
 
@@ -73,6 +128,8 @@ target_link_libraries(
   iniparser 
   chipmunk 
   soil
+  freetype
+  # ftgl
   ${OPENAL_LIBRARY} 
   ${OPENGL_gl_LIBRARY}
 )
@@ -90,7 +147,7 @@ endif ( MACOSX )
 #-------------------------------------------------------------------------------
 
 file( GLOB ROPEMAN_SRC ropeman/*.cpp ) 
-file( GLOB_RECURSE ROPEMAN_RESOURCES ropeman/resources/* ) 
+sm_glob_recurse( ROPEMAN_RESOURCES ropeman/resources/* ) 
 
 if ( MACOSX )
    

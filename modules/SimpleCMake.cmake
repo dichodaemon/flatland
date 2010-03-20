@@ -21,6 +21,21 @@ endmacro( SM_GLOB VARIABLE_NAME GLOB_EXPRESSION )
 #-------------------------------------------------------------------------------
 
 #--
+# Glob that filters out hidden files
+#--
+macro( SM_GLOB_RECURSE VARIABLE_NAME GLOB_EXPRESSION )
+  file( GLOB_RECURSE ${VARIABLE_NAME} ${GLOB_EXPRESSION} )
+  foreach( FILE_NAME ${${VARIABLE_NAME}} )
+    string( REGEX MATCH "^.*/[.].*$" REGEX_MATCHED ${FILE_NAME} )
+    if ( REGEX_MATCHED )
+      list( REMOVE_ITEM ${VARIABLE_NAME} ${FILE_NAME} )
+    endif ( REGEX_MATCHED )
+  endforeach( FILE_NAME ${VARIABLE_NAME} )
+endmacro( SM_GLOB VARIABLE_NAME GLOB_EXPRESSION )
+
+#-------------------------------------------------------------------------------
+
+#--
 # Configures c/c++
 #--
 macro( SM_SRC )

@@ -13,10 +13,10 @@ public:
   WrongKeyException( const std::string & message );
 };
 
-class ClassLoadingError : public std::runtime_error
+class FileLoadError : public std::runtime_error
 {
 public:
-  ClassLoadingError( const std::string & message );
+  FileLoadError( const std::string & message );
 };
 
 }

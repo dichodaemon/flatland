@@ -13,6 +13,7 @@ class ImageBase
 {
 public:
   virtual ~ImageBase();
+  virtual void fromBuffer( const uint8_t * buffer, size_t size ) = 0;
 }; 
 
  
@@ -21,7 +22,8 @@ public:
 
 extern "C"
 {
-  Flatland::ImageBase * newImage( const std::string & filename );
+  Flatland::ImageBase * newImage();
+  Flatland::ImageBase * newImageFromFile( const std::string & filename );
 }
 
 

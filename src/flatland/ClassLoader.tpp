@@ -46,7 +46,7 @@ Flatland::ClassLoader< T >::loadFactory( const std::string & factoryName )
     Logger::error( std::string( "Error: %s\n" ) + dlerror(), "ClassLoader" );
     handle = dlopen( findFile( _libraryName + LIBRARY_EXT, _searchPath ).c_str(), flags );
     if ( handle == 0 ) {
-      throw ClassLoadingError( "Unable to open class lib: " + _libraryName + " (" + factoryName + ")\nError:" + dlerror() );
+      throw FileLoadError( "Unable to open class lib: " + _libraryName + " (" + factoryName + ")\nError:" + dlerror() );
     }
   }
 
@@ -54,7 +54,7 @@ Flatland::ClassLoader< T >::loadFactory( const std::string & factoryName )
 
   if( factory == 0 ) {
     dlclose( handle );
-    throw ClassLoadingError( "Factory function '" + factoryName + "' not found for: " + _libraryName );
+    throw FileLoadError( "Factory function '" + factoryName + "' not found for: " + _libraryName );
   }
   return factory;
 }

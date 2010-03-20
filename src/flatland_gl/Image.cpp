@@ -9,6 +9,13 @@
 
 //------------------------------------------------------------------------------
 
+Image::Image()
+  : _image( 0 )
+{
+}
+
+//------------------------------------------------------------------------------
+
 Image::Image( const std::string & filename )
   : _image( SOIL_load_OGL_texture(
   		filename.c_str(),
@@ -23,8 +30,23 @@ Image::Image( const std::string & filename )
 
 Image::~Image()
 {  
-  GLuint texture = _image;
-  glDeleteTextures( 1, &texture );
+  if ( _image != 0 ) {
+    glDeleteTextures( 1, &_image );
+  }
+} 
+
+//------------------------------------------------------------------------------
+
+void 
+Image::fromBuffer( const uint8_t * buffer, size_t size )
+{
+  _image = SOIL_load_OGL_texture_from_memory(
+  		buffer,
+  		size,
+  		0,
+  		0,
+  		0
+  	);
 }
 
 //------------------------------------------------------------------------------
@@ -38,7 +60,15 @@ Image::index() const
 //------------------------------------------------------------------------------
 
 Flatland::ImageBase *
-newImage( const std::string & filename )
+newImage()
+{
+  return new Image();
+}
+
+//------------------------------------------------------------------------------
+
+Flatland::ImageBase *
+newImageFromFile( const std::string & filename )
 {
   return new Image( filename );
 }
